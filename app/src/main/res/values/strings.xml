@@ -1,0 +1,132 @@
+<resources>
+    <string name="app_name">Lagos Resiliency</string>
+    <string name="splash_title">www.lagosresiliencyproject.org</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="signup_title">CREATE ACCOUNT</string>
+    <string name="signup_first_name">First Name</string>
+    <string name="signup_last_name">Last Name</string>
+    <string name="signup_email">Email</string>
+    <string name="signup_phone">Phone</string>
+    <string name="submit">SUBMIT</string>
+    <string name="signup_toc">By Submitting, You agree to Terms &amp; Conditions</string>
+    <string name="signup_login">Login To Account</string>
+    <string name="enter_first_name">Please Enter Your First Name!</string>
+    <string name="enter_last_name">Please Enter Your Last Name!</string>
+    <string name="enter_email">Please Enter Your Email!</string>
+    <string name="enter_valid_email">Please Enter Valid Email!</string>
+    <string name="enter_phone">Please Enter Your Phone!</string>
+    <string name="signin_title">LOGIN</string>
+    <string name="signin_email_username">Email / Username</string>
+    <string name="signin_pwd">Password</string>
+    <string name="sign_forgot_pwd">Forgot Password</string>
+    <string name="signin_create_account">Create Account</string>
+    <string name="enter_name_email">Please Enter Your Email / Name!</string>
+    <string name="enter_pwd">Please Enter Password!</string>
+    <string name="proceed">Proceed</string>
+    <string name="no">No</string>
+    <string name="confirm_proceed_msg">Are you sure to proceed?</string>
+    <string name="registered_email_address">Registered Email Address</string>
+    <string name="reset_pwd">RESET PASSWORD</string>
+
+    <string name="reset_pwd_request_successful">RESET REQUEST SUCCESSFUL</string>
+    <string name="check_reset_code">Check Your Email for Reset Code</string>
+    <string name="_continue">CONTINUE</string>
+
+    <string name="reset">RESET</string>
+    <string name="enter_code">ENTER CODE</string>
+    <string name="enter_valid_code">Please Enter Valid Code!</string>
+
+    <string name="set_new_pwd_title">SET NEW PASSWORD</string>
+    <string name="enter_new_pwd">Enter New Password</string>
+    <string name="confirm_pwd_hint">Confirm New Password</string>
+    <string name="confirm_pwd">Please Confirm Password!</string>
+    <string name="pwd_mismatch">Passwords don\'t match!</string>
+    <string name="successful">SUCCESSFUL</string>
+    <string name="login">LOGIN</string>
+
+    <string name="dashboard">Dashboard</string>
+    <string name="about">About</string>
+    <string name="report_data">Report Data</string>
+    <string name="history">History</string>
+    <string name="notification">Notification</string>
+    <string name="menu_dashoboard">Dashboard</string>
+    <string name="menu_about">About</string>
+    <string name="menu_report_green_data">Report Circular Data</string>
+    <string name="menu_data_history">Data History</string>
+    <string name="menu_notifications">Notifications</string>
+    <string name="menu_profile_settings">Profile Settings</string>
+    <string name="menu_account_security">Account Security</string>
+    <string name="menu_toc">Terms &amp; Conditions</string>
+    <string name="menu_privacy_policy">Privacy Policy</string>
+    <string name="menu_logout">Log Out</string>
+    <string name="copyright">Copyright © 2022 | Nondunna Limited</string>
+    <string name="copyright1">Developed by Softcity Group</string>
+
+    <!-- FragDashboard-->
+    <string name="your_total_data_reports">Data Reports</string>
+    <string name="your_total_green_initiatives">Projects</string>
+    <string name="our_total_funding_partners">Funding</string>
+    <string name="our_total_stakeholders">Stakeholders</string>
+    <string name="reported_data_indicator_title">Reported Data Indicator</string>
+    <string name="reported_data_show_details_title">Show Details</string>
+    <string name="reported_data_hide_details_title">Hide Details</string>
+    <string name="featured_projects">Featured Circular Project</string>
+
+    <!-- FragNotification -->
+    <string name="notification_title">Notifications</string>
+
+    <!-- FragToc -->
+    <string name="toc_title">Terms and Conditions</string>
+    <string name="toc_content">At Lagos Resiliency Project, accessible from www.lagosresiliencyproject.org, one of our main priorities is the privacy of our users.  \n  This Privacy Policy document contains types of information that is collected and recorded by Lagos Resiliency Project and how we use it. \n If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us. \n This Privacy Policy applies only to activities on our mobile app and website, it is valid for visitors and users with regards to the information that they shared and/or collect. This policy is not applicable to any information collected offline or via third party channels. \n Consent \n By using our website or our app, you hereby consent to our Privacy Policy and agree to its terms. \n Information we collect \n If you contact us directly, we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us, and any other information you may choose to provide. \n When you register for an account, we may ask for your contact information, including items such as name, company name, address, email address, and telephone number. \n How we use your information \n We use the information we collect in various ways, including to: \n •	Provide, operate, and maintain our website and mobile app \n •	Improve, personalize, and expand our website and mobile app \n •	Understand and analyze how you use our website and mobile app \n •	Develop new products, services, features, and functionality \n •	Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes \n •	Send you emails \n •	Find and prevent fraud \n  \n Log Files \n Lagos Resiliency Project follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services\' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. \n The purpose of the information is for analyzing trends, administering the site, managing our app, tracking users\' movement on the website, and gathering demographic information. \n Cookies and Web Beacons \n Like any other website, Lagos Resiliency Project uses \'cookies\'. These cookies are used to store information including visitors\' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users\' experience by customizing our web page content based on visitors\' browser type and/or other information. \n Third Party Privacy Policies \n Lagos Resiliency Project\'s Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options. \n You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers\' respective websites. \n CCPA Privacy Rights (Do Not Sell My Personal Information ) \n Under the CCPA, among other rights, California   consumers have the right to: \n Request that a business that collects a consumer\'s personal data disclose the categories and specific pieces of personal data that a business has collected about consumers. \n Request that a business delete any personal data about the consumer that a business has collected. \n Request that a business that sells a consumer\'s personal data, not sell the consumer\'s personal data. \n If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us. \n GDPR and NDPR Data Protection Rights \n We would like to make sure you are fully aware of all of your data protection rights. Every user is entitled to the following: \n The right to access: You have the right to request copies of your personal data. We may charge you a small fee for this service. \n The right to rectification: You have the right to request that we correct any information you believe is inaccurate. You also have the right to request that we complete the information you believe is incomplete. \n The right to erasure: You have the right to request that we erase your personal data, under certain conditions. \n The right to restrict processing: You have the right to request that we restrict the processing of your personal data, under certain conditions. \n The right to object to processing: You have the right to object to our processing of your personal data, under certain conditions. \n The right to data portability: You have the right to request that we transfer the data that we have collected to another organization, or directly to you, under certain conditions. \n If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us. \n Children\'s Information \n Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity. \n Lagos Resiliency Project does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.</string>
+    <string name="toc_gdpr_rights">GDPR/NDPR RIGHTS</string>
+
+    <!-- FragUpdateProfileMain-->
+    <string name="update_profile_title">Update Your Profile</string>
+    <string name="localization_industry">Localization &amp; Inducstry</string>
+    <string name="data_report_preference">Data Report Preference</string>
+    <string name="edit">Edit</string>
+    <string name="report_frequency_reminder">Report Frequency Reminder</string>
+    <string name="update">UPDATE</string>
+
+    <!-- FragUpdateProfilePreferences-->
+    <string name="update_profile_preference_title">Set Up Your Preference</string>
+    <string name="select_your_industry">Select Your Industry</string>
+    <string name="select_your_industry_msg">Select Your Industry</string>
+    <string name="team_size">What\'s Your Current Team Size</string>
+    <string name="team_size_msg">What\'s Your Current Team Size</string>
+    <string name="green_project_budget">What\'s Your Circular Project Budget</string>
+    <string name="green_project_budget_msg">What\'s Your Circular Project Budget</string>
+    <string name="impacts_of_project">Impacts of Your Circular Project</string>
+    <string name="impacts_of_project_msg">Impacts of Your Circular Project</string>
+    <string name="select_data_report_fields">Select Your Data Report Fields</string>
+    <string name="select_data_report_fields_msg">Select Your Data Report Fields</string>
+    <string name="your_progress">Your Progress</string>
+    <string name="complete_setup">COMPLETE SETUP</string>
+    <string name="confirm">CONFIRM</string>
+
+    <!--FragReportDataMain-->
+    <string name="report_data_main_title">Report Circular Data</string>
+    <string name="no_report_data_field_set">You haven\'t set up the Report Data Fields, yet.\nDo you want to set it up now?</string>
+
+    <!--FragFeaturedProject-->
+    <string name="dummy_featured_project_content">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a gallery of ty pe and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="featured_project_title">Featured Project</string>
+
+    <!--FragGdpr-->
+    <string name="frag_gdpr_title">GDPR / NDPR Compliance</string>
+    <string name="frag_gdpr_content">I hereby request that my personal data be deleted and no longer be processed for any purpose whatsoever.</string>
+
+    <string name="coming_soon">This feature is coming soon.</string>
+    <string name="privacy_policy_title">Privacy Policy</string>
+
+</resources>

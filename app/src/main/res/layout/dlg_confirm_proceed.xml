@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="5dp"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="30dp"
+                android:src="@drawable/logo_title" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_dlg_confirm_proceed_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="@dimen/fontsize_tiny1"
+            android:text="Are you sure to proceed?"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/tv_dlg_confirm_proceed_yes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:background="@drawable/round_rect_red_selector"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="@dimen/fontsize_tiny"
+                android:text="@string/proceed"/>
+
+            <RelativeLayout
+                android:layout_width="5dp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_dlg_confirm_proceed_no"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@android:color/black"
+                android:background="@drawable/round_rect_white_selector"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="@dimen/fontsize_tiny"
+                android:text="@string/no"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:background="@drawable/round_rect_white_alpha_normal"
+        android:padding="15dp">
+
+        <EditText
+            android:id="@+id/ed_lvitem_report_data_main_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:background="@android:color/transparent"
+            android:padding="10dp"
+            android:textColor="@color/txtclr_dark_gray"
+            android:textSize="@dimen/fontsize_extra_tiny"
+            android:text="A"/>
+    </LinearLayout>
+</RelativeLayout>

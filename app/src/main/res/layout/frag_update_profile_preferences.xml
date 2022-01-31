@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_frag_update_profile_preferences_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/update_profile_preference_title"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/fontsize_normal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_frag_update_profile_preference_industry_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_rect_white_alpha_normal"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_industry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_your_industry"
+                        android:textColor="@color/txtclr_dark_gray"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_industry_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/oval_green"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:text="\?"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_frag_update_profile_preference_team_size_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_rect_white_alpha_normal"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_team_size"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/team_size"
+                        android:textColor="@color/txtclr_dark_gray"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_team_size_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/oval_green"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:text="\?"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_frag_update_profile_preference_green_project_budget_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_rect_white_alpha_normal"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_green_project_budget"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/green_project_budget"
+                        android:textColor="@color/txtclr_dark_gray"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_green_project_budget_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/oval_green"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:text="\?"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_frag_update_profile_preference_impacts_of_project_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_rect_white_alpha_normal"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_impacts_of_project"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/impacts_of_project"
+                        android:textColor="@color/txtclr_dark_gray"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_impacts_of_project_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/oval_green"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:text="\?"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_frag_update_profile_preference_select_data_report_fields_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_rect_white_alpha_normal"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_select_data_report_fields"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_data_report_fields"
+                        android:textColor="@color/txtclr_dark_gray"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_preference_select_data_report_fields_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/oval_green"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:text="\?"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_frag_update_profile_preferences_sub_content_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:visibility="gone"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp">
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/cht_frag_update_profile_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_frag_update_profile_preference_complete_setup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/round_rect_green_selector"
+        android:padding="5dp"
+        android:text="@string/complete_setup"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/fontsize_normal" />
+</LinearLayout>

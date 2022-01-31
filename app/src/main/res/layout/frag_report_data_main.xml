@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_frag_report_data_main_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/report_data_main_title"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/fontsize_normal" />
+
+    <ListView
+        android:id="@+id/lv_frag_report_data_main_data"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:dividerHeight="5dp"
+        android:divider="@android:color/transparent"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/tv_frag_report_data_main_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/round_rect_green_selector"
+        android:padding="5dp"
+        android:text="@string/submit"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/fontsize_normal" />
+</LinearLayout>

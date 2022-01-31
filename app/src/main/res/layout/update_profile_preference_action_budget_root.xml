@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_rect_white_alpha_normal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_update_profile_preference_action_budget_root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/green_project_budget"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/fontsize_tiny1"
+            android:layout_margin="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/ll_update_profile_preference_action_budget_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_update_profile_preference_action_budget_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_rect_green_selector"
+            android:padding="5dp"
+            android:text="@string/confirm"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/fontsize_small" />
+    </LinearLayout>
+</RelativeLayout>

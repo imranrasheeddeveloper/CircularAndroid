@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_frag_update_profile_main_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/update_profile_title"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/fontsize_normal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:id="@+id/ll_frag_update_profile_main_info_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_rect_white_alpha_normal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <ImageView
+                    android:id="@+id/iv_frag_update_profile_main_info_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:src="@drawable/dummy_avatar" />
+
+                <EditText
+                    android:id="@+id/tv_frag_update_profile_main_info_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/transparent"
+                    android:inputType="textPersonName"
+                    android:text="Maduka Badmus"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/fontsize_normal"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tv_frag_update_profile_main_info_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/transparent"
+                    android:inputType="textEmailAddress"
+                    android:text="madbudmas@gmail.com"
+                    android:textColor="@color/txtclr_dark_gray"
+                    android:textSize="@dimen/fontsize_tiny1" />
+
+                <EditText
+                    android:id="@+id/tv_frag_update_profile_main_info_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/transparent"
+                    android:inputType="textPhonetic"
+                    android:text="08039283492"
+                    android:textColor="@color/txtclr_dark_gray"
+                    android:textSize="@dimen/fontsize_tiny1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_frag_update_profile_main_localization_industry_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_rect_white_alpha_normal"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_frag_update_profile_main_localization_industry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/localization_industry"
+                    android:textColor="@color/txtclr_darker_gray"
+                    android:textSize="@dimen/fontsize_tiny1" />
+
+                <Spinner
+                    android:id="@+id/sp_frag_update_profile_main_localization_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layoutMode="clipBounds"
+                    android:spinnerMode="dropdown"
+                    android:textColor="@color/txtclr_dark_gray"
+                    android:textSize="@dimen/fontsize_extra_tiny" />
+
+                <Spinner
+                    android:id="@+id/sp_frag_update_profile_main_industry_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/txtclr_dark_gray"
+                    android:textSize="@dimen/fontsize_extra_tiny" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_frag_update_profile_main_data_report_preference_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_rect_white_alpha_normal"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_main_data_report_preference"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/data_report_preference"
+                        android:textColor="@color/txtclr_darker_gray"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                    <TextView
+                        android:id="@+id/tv_frag_update_profile_main_data_report_preference_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/edit"
+                        android:textColor="@color/blue_light"
+                        android:textSize="@dimen/fontsize_tiny1" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_frag_update_profile_main_report_data_fields_content_root"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_frag_update_profile_main_report_frequency_reminder_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_rect_white_alpha_normal"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_frag_update_profile_main_report_frequency_reminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/report_frequency_reminder"
+                    android:textColor="@color/txtclr_darker_gray"
+                    android:textSize="@dimen/fontsize_tiny1" />
+
+                <Spinner
+                    android:id="@+id/sp_frag_update_profile_main_report_frequency_reminder_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/txtclr_darker_gray"
+                    android:textSize="@dimen/fontsize_tiny1" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_frag_update_profile_main_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/round_rect_green_selector"
+        android:padding="5dp"
+        android:text="@string/update"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/fontsize_normal" />
+</LinearLayout>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_main" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#AA000000"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/hor_margin_main_content_sign"
+        android:paddingRight="@dimen/hor_margin_main_content_sign">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/round_rect_green_normal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/oval_white"
+                android:src="@drawable/logo_1" />
+
+            <TextView
+                android:id="@+id/tv_frag_reset_pwd_request_successful_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/reset_pwd_request_successful"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/fontsize_small"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_frag_reset_pwd_request_successful_check_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/check_reset_code"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/fontsize_tiny" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_frag_reset_pwd_request_successful_continue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/round_rect_red_selector"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:text="@string/_continue"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/fontsize_big" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_frag_reset_pwd_request_successful_login_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/signup_login"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/fontsize_super_tiny" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_frag_reset_pwd_request_successful_create_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/signin_create_account"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/fontsize_super_tiny" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
