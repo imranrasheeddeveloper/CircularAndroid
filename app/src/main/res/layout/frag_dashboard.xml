@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_frag_dashboard_title"
@@ -67,7 +72,7 @@
                             android:id="@+id/tv_frag_dashboard_your_data_reports_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="320"
+                            android:text="-"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/fontsize_small"
                             android:textStyle="bold"/>
@@ -115,7 +120,7 @@
                             android:id="@+id/tv_frag_dashboard_your_total_green_initiatives_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="04"
+                            android:text="-"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/fontsize_small"
                             android:textStyle="bold"/>
@@ -128,54 +133,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/round_rect_white_alpha_normal"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/dashboard_items_padding">
-
-                    <ImageView
-                        android:id="@+id/iv_frag_dashboard_our_total_funding_partners"
-                        android:layout_width="@dimen/dashboard_imageview_size"
-                        android:layout_height="@dimen/dashboard_imageview_size"
-                        android:background="@drawable/round_rect_red_normal"
-                        android:padding="10dp"
-                        android:src="@drawable/our_total_funding_partners" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_frag_dashboard_our_total_funding_partners_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/our_total_funding_partners"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/fontsize_super_tiny" />
-
-                        <TextView
-                            android:id="@+id/tv_frag_dashboard_our_total_funding_partners_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="101"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/fontsize_small"
-                            android:textStyle="bold"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="10dp"
-                    android:layout_height="wrap_content" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -212,11 +169,60 @@
                             android:id="@+id/tv_frag_dashboard_our_total_stakeholders_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="125"
+                            android:text="-"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/fontsize_small"
                             android:textStyle="bold"/>
                     </LinearLayout>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_rect_white_alpha_normal"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dashboard_items_padding">
+
+                    <ImageView
+                        android:id="@+id/iv_frag_dashboard_our_total_funding_partners"
+                        android:layout_width="@dimen/dashboard_imageview_size"
+                        android:layout_height="@dimen/dashboard_imageview_size"
+                        android:background="@drawable/round_rect_red_normal"
+                        android:padding="10dp"
+                        android:src="@drawable/our_total_funding_partners" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_frag_dashboard_our_total_funding_partners_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/our_total_funding_partners"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/fontsize_super_tiny" />
+
+                        <TextView
+                            android:id="@+id/tv_frag_dashboard_our_total_funding_partners_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/fontsize_small"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -331,4 +337,12 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/home_loading"
+        android:visibility="gone"
+        layout="@layout/progress_layout"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

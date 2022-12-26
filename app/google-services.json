@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1006515455817",
+    "project_id": "green-dashboard-bc691",
+    "storage_bucket": "green-dashboard-bc691.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006515455817:android:3ce7d4c472effdac05bc98",
+        "android_client_info": {
+          "package_name": "com.circular.circular"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006515455817-147msbbfiosuhbk2hhjen8e1nj8ovjr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATtlYsyIH9XJKxyvyrTotKNLLeggcXAF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006515455817-147msbbfiosuhbk2hhjen8e1nj8ovjr8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

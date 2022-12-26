@@ -28,10 +28,10 @@
             android:id="@+id/nav_profile_settings"
             android:icon="@drawable/icon_profile"
             android:title="@string/menu_profile_settings" />
-        <item
-            android:id="@+id/nav_account_security"
-            android:icon="@drawable/icon_account_security"
-            android:title="@string/menu_account_security" />
+<!--        <item-->
+<!--            android:id="@+id/nav_account_security"-->
+<!--            android:icon="@drawable/icon_account_security"-->
+<!--            android:title="@string/menu_account_security" />-->
         <item
             android:id="@+id/nav_toc"
             android:icon="@drawable/icon_toc"

@@ -4,60 +4,98 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.circular.circular.CircularApplication;
+import com.circular.circular.Constant;
 import com.circular.circular.R;
-import com.circular.circular.model.NotificationItem;
+import com.circular.circular.model.notifications.NotificationsItem;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class NotificationItemAdapter extends BaseAdapter {
+public class NotificationItemAdapter extends RecyclerView.Adapter<NotificationItemAdapter.ViewHolder> {
 
     private Context mCtx;
     private LayoutInflater mInflater;
-    private ArrayList<NotificationItem> mArrData;
-    public NotificationItemAdapter(Context ctx, ArrayList<NotificationItem> arrData){
-        mCtx = ctx;
-        mArrData = new ArrayList<>();
-        if (arrData != null && arrData.size() > 0){
-            mArrData.addAll(arrData);
-        }
-        mInflater = LayoutInflater.from(mCtx);
+    private List<NotificationsItem> mArrData;
+    OnItemClickListener listener;
+
+    public void setOnNotificationClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public NotificationItemAdapter(List<NotificationsItem> data, Context context) {
+        this.mArrData = data;
+        this.mCtx = context;
+    }
+
+    @NonNull
+    @Override
+    public NotificationItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lvitem_notification, parent, false);
+        return new NotificationItemAdapter.ViewHolder(view,listener);
     }
 
     @Override
-    public int getCount() {
+    public void onBindViewHolder(@NonNull NotificationItemAdapter.ViewHolder holder, int position) {
+        NotificationsItem item = mArrData.get(position);
+        holder.title.setText(item.getHeading());
+        holder.name.setText(item.getText());
+        holder.time.setText(Constant.constant.getDate(item.getCreatedAt()));
+        holder.title.setTypeface(CircularApplication.mTfMainRegular);
+        holder.name.setTypeface(CircularApplication.mTfMainRegular);
+        holder.time.setTypeface(CircularApplication.mTfMainRegular);
+        holder.eyeIcon.setImageResource(
+                item.isIsRead() ? R.drawable.eye_green : R.drawable.eye_gray
+        );
+    }
+
+
+    @Override
+    public int getItemCount() {
         return mArrData.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return mArrData.get(i);
+    public interface OnItemClickListener {
+        void onRead(int position);
+        void onDetail(int position);
     }
 
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null){
-            view = mInflater.inflate(R.layout.lvitem_notification, null);
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView name , title, time;
+        ImageView eyeIcon;
+
+        public ViewHolder(@NonNull View itemView, OnItemClickListener listener) {
+            super(itemView);
+
+            title = itemView.findViewById(R.id.tv_lvitem_notification_title);
+            name = itemView.findViewById(R.id.tv_lvitem_notification_name);
+            time = itemView.findViewById(R.id.tv_lvitem_notification_time);
+            eyeIcon = itemView.findViewById(R.id.iv_lvitem_notification_eye);
+
+            eyeIcon.setOnClickListener(v -> {
+               if (listener != null){
+                   if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                       listener.onRead(getAdapterPosition());
+                   }
+               }
+            });
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null){
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                        listener.onDetail(getAdapterPosition());
+                    }
+                }
+            });
+
         }
-        NotificationItem item = (NotificationItem)getItem(i);
-        ((TextView)view.findViewById(R.id.tv_lvitem_notification_title)).setText(item.mStrTitle);
-        ((TextView)view.findViewById(R.id.tv_lvitem_notification_name)).setText(item.mStrName);
-        ((TextView)view.findViewById(R.id.tv_lvitem_notification_time)).setText(item.mStrTime);
-        ((TextView)view.findViewById(R.id.tv_lvitem_notification_title)).setTypeface(CircularApplication.mTfMainRegular);
-        ((TextView)view.findViewById(R.id.tv_lvitem_notification_name)).setTypeface(CircularApplication.mTfMainRegular);
-        ((TextView)view.findViewById(R.id.tv_lvitem_notification_time)).setTypeface(CircularApplication.mTfMainRegular);
-        ((ImageView)view.findViewById(R.id.iv_lvitem_notification_eye)).setImageResource(
-                item.m_bStatus ? R.drawable.eye_green : R.drawable.eye_gray
-        );
-        return view;
     }
+
 }

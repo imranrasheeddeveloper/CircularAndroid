@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.circular.circular.CircularApplication;
 import com.circular.circular.R;
 import com.circular.circular.SignUpActivity;
+import com.circular.circular.local.TinyDbManager;
 
 public class FragResetPwdRequestSuccessful extends Fragment {
     private View mRootView;
@@ -31,7 +32,7 @@ public class FragResetPwdRequestSuccessful extends Fragment {
     private void initControls(){
         mRootView.findViewById(R.id.tv_frag_reset_pwd_request_successful_continue).setOnClickListener(view -> {
             if (getActivity() instanceof SignUpActivity){
-                ((SignUpActivity)getActivity()).addFragment(R.id.fl_sign_container, new FragResetPwdEnterCode(), true);
+                ((SignUpActivity)getActivity()).addFragment(R.id.fl_sign_container, new FragSignIn(), true);
             }
         });
 

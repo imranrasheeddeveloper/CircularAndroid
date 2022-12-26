@@ -31,7 +31,7 @@
                 android:src="@drawable/logo_title" />
         </LinearLayout>
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_main_avatar"
             android:layout_width="50dp"
             android:layout_height="50dp"

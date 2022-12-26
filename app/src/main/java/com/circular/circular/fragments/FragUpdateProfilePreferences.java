@@ -14,41 +14,71 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.circular.circular.CircularApplication;
 import com.circular.circular.Constant;
 import com.circular.circular.R;
 import com.circular.circular.dialog.ConfirmDialogInterface;
 import com.circular.circular.dialog.DialogConfirm;
 import com.circular.circular.dialog.DialogMessageWithNoButtons;
+import com.circular.circular.local.PreferenceRepository;
+import com.circular.circular.local.TinyDbManager;
 import com.circular.circular.model.ReportDataField;
+import com.circular.circular.model.data_points.DataPointsItem;
+import com.circular.circular.model.data_points.DataTypesItem;
 import com.circular.circular.utils.Utils;
+import com.circular.circular.view_model.DataPointsViewModel;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class FragUpdateProfilePreferences extends Fragment {
     private View mRootView;
     private PieChart mChart;
     private RelativeLayout mRlSubContentRoot;
     private static final int PREFERENCES_COUNT = 5;
+    List<DataPointsItem> dataPoints;
+    //List<DataTypesItem> industryTypes;
     private final String[] mArrIndustries = new String[]{
-            "Information Technology",
-            "Finance",
-            "Heavy Industry",
-            "Agriculture"
+            "Agriculture",
+            "entertainment",
+            "Healthcare",
+            "Movie",
+            "Media and broadcasting",
+            "Insurance",
+            "Oil and gas",
+            "Utility",
+            "ICT (information and communications technology)",
+            "Import and export",
+            "Natural resources",
+            "Industrial goods",
+            "Consumer goods",
+            "Real estate",
+            "Services",
+            "Banking",
+            "Cement",
+            "Textile",
+            "Food",
+            "Brewing",
+            "Government"
     };
 
     private final String[] mArrTeamSize = new String[]{
@@ -71,34 +101,48 @@ public class FragUpdateProfilePreferences extends Fragment {
             "5 Impacts",
             "10 Impacts"
     };
+    private List<Integer> selected_data_points;
+    private List<DataPointsItem> selected_data;
 
-    private final String[] mArrReportFields = new String[]{
-            "Measured Co2 Emission",
-            "Estimated Co2 Emission",
-            "Financial Worth of Co2 Emitted",
-            "Co2 Emission Reduced",
-            "Real Income Per Co2 Emitted",
-            "Total Organic Waste",
-            "Measured Total Primary Energy Supply",
-            "Total Recycled Waste",
-            "Estimated Total Primary Energy Supply",
-            "Agric Output Increase",
-            "Daily Organic Raw Materials Weigh",
-            "Total In-Organic Waste",
-            "Daily Organic Raw Materials Financial Value",
-            "Agric Output Decrease"
-    };
+//    private final String[] mArrReportFields = new String[]{
+//            "Measured Co2 Emission",
+//            "Estimated Co2 Emission",
+//            "Financial Worth of Co2 Emitted",
+//            "Co2 Emission Reduced",
+//            "Real Income Per Co2 Emitted",
+//            "Total Organic Waste",
+//            "Measured Total Primary Energy Supply",
+//            "Total Recycled Waste",
+//            "Estimated Total Primary Energy Supply",
+//            "Agric Output Increase",
+//            "Daily Organic Raw Materials Weigh",
+//            "Total In-Organic Waste",
+//            "Daily Organic Raw Materials Financial Value",
+//            "Agric Output Decrease"
+//    };
 
     private ArrayList<ReportDataField> mArrReportDataField = new ArrayList<>();
     private int m_nActionCode = -1;
     private HashMap<Integer, Integer> mMapInitialActions = new HashMap<>();
     private ArrayList<Boolean> mArrUpdateStatus = new ArrayList<>();
+    private DataPointsViewModel viewModel;
+    private PreferenceRepository repository;
+
 
     @SuppressLint("InflateParams")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.frag_update_profile_preferences, null);
         Bundle bundle = getArguments();
+        viewModel = new ViewModelProvider(this).get(DataPointsViewModel.class);
+        repository = new PreferenceRepository();
+        dataPoints = new ArrayList<>();
+        //industryTypes = new ArrayList<>();
+
+        selected_data_points = new ArrayList<>();
+        selected_data = new ArrayList<>();
+
+        getDataPoints();
         if (bundle != null && bundle.containsKey(Constant.UPDATE_PROFILE_STARTUP_ACTION)) {
             m_nActionCode = bundle.getInt(Constant.UPDATE_PROFILE_STARTUP_ACTION);
         }
@@ -108,6 +152,46 @@ public class FragUpdateProfilePreferences extends Fragment {
             mRootView.findViewById(mMapInitialActions.get(m_nActionCode)).performClick();
         }
         return mRootView;
+    }
+
+    private void getDataPoints() {
+        String token = repository.getString("token");
+        viewModel.getPoints(token);
+        viewModel._data_points.observe(getViewLifecycleOwner() ,  response -> {
+            if (response != null){
+                if (response.isLoading()) {
+                    showLoading();
+                } else if (!response.getError().isEmpty()) {
+                    hideLoading();
+                    showSnackBar(response.getError());
+                } else if (response.getData().getData() != null) {
+                    hideLoading();
+
+//                    if (response.getData().getData().getDataTypes() != null){
+//                        industryTypes.addAll(response.getData().getData().getDataTypes());
+//                    }
+                    if (response.getData().getData().getDataPoints() != null){
+                        dataPoints.addAll(response.getData().getData().getDataPoints());
+                    }
+
+
+                }
+            }
+
+        });
+    }
+
+
+    private void showSnackBar(String msg) {
+        Snackbar.make(requireView(), msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void showLoading() {
+        ((ConstraintLayout)mRootView.findViewById(R.id.data_loading)).setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoading() {
+        ((ConstraintLayout)mRootView.findViewById(R.id.data_loading)).setVisibility(View.GONE);
     }
 
     private void initData() {
@@ -171,32 +255,54 @@ public class FragUpdateProfilePreferences extends Fragment {
     private void initEvents() {
 
         mRootView.findViewById(R.id.tv_frag_update_profile_preference_complete_setup).setOnClickListener(view -> {
-            DialogConfirm dlg = new DialogConfirm(requireActivity(),
-                    R.layout.dlg_confirm_proceed,
-                    R.id.tv_dlg_confirm_proceed_yes,
-                    R.id.tv_dlg_confirm_proceed_no,
-                    R.id.tv_dlg_confirm_proceed_msg,
-                    getString(R.string.confirm_proceed_msg),
-                    new ConfirmDialogInterface() {
-                        @Override
-                        public void onClickedConfirm() {
-                            requireActivity().onBackPressed();
-                        }
+            if (mArrReportDataField.size() > 0) {
+                DialogConfirm dlg = new DialogConfirm(requireActivity(),
+                        R.layout.dlg_confirm_proceed,
+                        R.id.tv_dlg_confirm_proceed_yes,
+                        R.id.tv_dlg_confirm_proceed_no,
+                        R.id.tv_dlg_confirm_proceed_msg,
+                        getString(R.string.confirm_proceed_msg),
+                        new ConfirmDialogInterface() {
+                            @Override
+                            public void onClickedConfirm() {
+                                String token = repository.getString("token");
+                                String name = TinyDbManager.getUserInformation().getName() + " " + TinyDbManager.getUserInformation().getLastName();
+                                viewModel.createPreferences(token, name, selected_data_points);
+                                viewModel._create_pref.observe(getViewLifecycleOwner(), response -> {
+                                    if (response != null) {
+                                        if (response.isLoading()) {
+                                            showLoading();
+                                        } else if (!response.getError().isEmpty()) {
+                                            hideLoading();
+                                            showSnackBar(response.getError());
+                                        } else if (response.getData().getData() != null) {
+                                            for (int i = 0; i < selected_data.size(); i++) {
+                                                TinyDbManager.saveDataPoints(selected_data.get(i));
+                                            }
+                                            requireActivity().onBackPressed();
+                                        }
+                                    }
+                                });
+                            }
 
-                        @Override
-                        public void onClickedNo() {
+                            @Override
+                            public void onClickedNo() {
 
-                        }
-                    });
-            dlg.show();
-            Utils.setDialogWidth(dlg, 0.8f, requireActivity());
+                            }
+                        });
+                dlg.show();
+                Utils.setDialogWidth(dlg, 0.8f, requireActivity());
+            }else {
+               // Toast.makeText(getActivity(), "Select Data Points", Toast.LENGTH_LONG).show();
+            }
         });
 
         mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry_hint).setOnClickListener(view -> {
             DialogMessageWithNoButtons dlg = new DialogMessageWithNoButtons(requireActivity(),
                     R.layout.dlg_message_withno_buttons,
                     R.id.tv_dlg_message_withno_buttons_msg,
-                    "This is a text providing explanation about this feature is about; this will guide users on what it expected from them.");
+                    String.valueOf(mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry_hint).getTag())
+                    );
             dlg.show();
             Utils.setDialogWidth(dlg, 0.8f, requireActivity());
         });
@@ -254,7 +360,9 @@ public class FragUpdateProfilePreferences extends Fragment {
         });
 
         mRootView.findViewById(R.id.ll_frag_update_profile_preference_select_data_report_fields_root).setOnClickListener(view -> {
-            handleReportDataFields();
+            if (dataPoints.size() > 0) {
+                handleReportDataFields(dataPoints);
+            }
         });
     }
 
@@ -407,6 +515,11 @@ public class FragUpdateProfilePreferences extends Fragment {
             tv.setOnClickListener(view -> {
                 ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry)).setText(String.valueOf(view.getTag()));
             });
+//            int finalI = i;
+//            tv.setOnClickListener(view -> {
+//                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry)).setText(String.valueOf(view.getTag()));
+//                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry_hint)).setTag(String.valueOf(industryTypes.get(finalI).getDescription()));
+//            });
         }
         mRlSubContentRoot.addView(rlRoot);
         mRlSubContentRoot.setVisibility(View.VISIBLE);
@@ -571,7 +684,7 @@ public class FragUpdateProfilePreferences extends Fragment {
         mRlSubContentRoot.setVisibility(View.VISIBLE);
     }
 
-    private void handleReportDataFields() {
+    private void handleReportDataFields(List<DataPointsItem> dataPoints) {
         DisplayMetrics metrics = new DisplayMetrics();
         requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         mRlSubContentRoot.removeAllViews();
@@ -583,7 +696,7 @@ public class FragUpdateProfilePreferences extends Fragment {
         int iCurrentRowWidth = 0;
         LinearLayout llRow = null;
 
-        for (int i = 0; i < mArrReportFields.length; i++) {
+        for (int i = 0; i < dataPoints.size(); i++) {
             if (llRow == null) {
                 llRow = new LinearLayout(requireActivity());
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -592,17 +705,20 @@ public class FragUpdateProfilePreferences extends Fragment {
                 llRow.setLayoutParams(lp);
                 llRoot.addView(llRow);
             }
-            ReportDataField reportDataField = new ReportDataField(mArrReportFields[i]);
+            ReportDataField reportDataField = new ReportDataField(dataPoints.get(i).getDescription());
             RelativeLayout rlItem = (RelativeLayout) inflater.inflate(R.layout.report_data_field_item, null);
             rlItem.setTag(reportDataField);
             LinearLayout.LayoutParams lpItem = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             rlItem.setLayoutParams(lpItem);
-            ((TextView) rlItem.findViewById(R.id.tv_report_data_field_item_title)).setText(mArrReportFields[i]);
+            ((TextView) rlItem.findViewById(R.id.tv_report_data_field_item_title)).setText(dataPoints.get(i).getName());
             ((TextView) rlItem.findViewById(R.id.tv_report_data_field_item_title)).setTypeface(CircularApplication.mTfMainRegular);
             rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_white_with_black_corner_normal);
+            int finalI = i;
             rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setOnClickListener(view -> {
+                selected_data_points.add(dataPoints.get(finalI).getId());
+                selected_data.add(dataPoints.get(finalI));
                 rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.VISIBLE);
                 rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_blue_with_black_corner_normal);
                 ReportDataField reportDataFieldSelected = (ReportDataField) rlItem.getTag();
@@ -617,8 +733,19 @@ public class FragUpdateProfilePreferences extends Fragment {
             rlItem.findViewById(R.id.iv_report_data_field_item_remove).setOnClickListener(view -> {
                 rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.GONE);
                 rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_white_with_black_corner_normal);
+
+                if (selected_data_points.size() > 0){
+                    for (int j = 0; j < selected_data_points.size(); j++) {
+                        if (selected_data_points.get(j).equals(dataPoints.get(finalI).getId())){
+                            selected_data_points.remove(j);
+                            selected_data.remove(j);
+                        }
+                    }
+                }
+
                 ReportDataField reportDataFieldSelected = (ReportDataField) rlItem.getTag();
                 if (reportDataFieldSelected != null) {
+
                     for (int j = 0; j < mArrReportDataField.size(); j++) {
                         if (mArrReportDataField.get(j).equals(reportDataFieldSelected)) {
                             mArrReportDataField.remove(j);
@@ -634,7 +761,7 @@ public class FragUpdateProfilePreferences extends Fragment {
                 DialogMessageWithNoButtons dlg = new DialogMessageWithNoButtons(requireActivity(),
                         R.layout.dlg_message_withno_buttons,
                         R.id.tv_dlg_message_withno_buttons_msg,
-                        "This is a text providing explanation about this feature is about; this will guide users on what it expected from them.");
+                        reportDataFieldSelected.mStrName);
                 dlg.show();
                 Utils.setDialogWidth(dlg, 0.8f, requireActivity());
             });

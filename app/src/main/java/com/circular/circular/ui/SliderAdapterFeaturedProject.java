@@ -1,19 +1,20 @@
 package com.circular.circular.ui;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.circular.circular.CircularApplication;
+import com.circular.circular.Constant;
 import com.circular.circular.MainActivity;
 import com.circular.circular.R;
 import com.circular.circular.fragments.FragFeaturedProject;
 import com.circular.circular.model.FeaturedProjectData;
+import com.circular.circular.model.ProjectsItem;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.ArrayList;
@@ -23,26 +24,26 @@ public class SliderAdapterFeaturedProject extends
         SliderViewAdapter<SliderAdapterFeaturedProject.SliderAdapterVH> {
 
     private Context context;
-    private List<FeaturedProjectData> mSliderItems = new ArrayList<>();
+    private List<ProjectsItem> mSliderItems = new ArrayList<>();
 
     public SliderAdapterFeaturedProject(Context context) {
         this.context = context;
     }
 
-    public void renewItems(List<FeaturedProjectData> sliderItems) {
+    public void renewItems(List<ProjectsItem> sliderItems) {
         this.mSliderItems = sliderItems;
         notifyDataSetChanged();
     }
 
-    public void deleteItem(int position) {
-        this.mSliderItems.remove(position);
-        notifyDataSetChanged();
-    }
-
-    public void addItem(FeaturedProjectData sliderItem) {
-        this.mSliderItems.add(sliderItem);
-        notifyDataSetChanged();
-    }
+//    public void deleteItem(int position) {
+//        this.mSliderItems.remove(position);
+//        notifyDataSetChanged();
+//    }
+//
+//    public void addItem(FeaturedProjectData sliderItem) {
+//        this.mSliderItems.add(sliderItem);
+//        notifyDataSetChanged();
+//    }
 
     @Override
     public SliderAdapterVH onCreateViewHolder(ViewGroup parent) {
@@ -53,16 +54,16 @@ public class SliderAdapterFeaturedProject extends
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, final int position) {
 
-        FeaturedProjectData sliderItem = mSliderItems.get(position);
+        ProjectsItem sliderItem = mSliderItems.get(position);
 
-        viewHolder.textViewDescription.setText(sliderItem.mStrLabel);
+        viewHolder.textViewDescription.setText(sliderItem.getDescription());
         viewHolder.textViewDescription.setTypeface(CircularApplication.mTfMainRegular);
-        viewHolder.imageViewBackground.setImageResource(sliderItem.m_nDrawableResId);
+        Glide.with(context).load(Constant.IMG_PATH + sliderItem.getImg()).into(viewHolder.imageViewBackground);
         viewHolder.itemView.setTag(sliderItem);
         viewHolder.itemView.setOnClickListener(view->{
             if (context != null && context instanceof MainActivity){
                 ((MainActivity)context).addFragmentFromBottom(R.id.fl_main_container,
-                        new FragFeaturedProject((FeaturedProjectData) view.getTag()), true);
+                        new FragFeaturedProject((ProjectsItem) view.getTag()), true);
             }
         });
     }

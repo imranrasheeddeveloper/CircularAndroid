@@ -12,17 +12,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.circular.circular.CircularApplication;
+import com.circular.circular.Constant;
 import com.circular.circular.MainActivity;
 import com.circular.circular.ProfileActivity;
 import com.circular.circular.R;
 import com.circular.circular.model.FeaturedProjectData;
+import com.circular.circular.model.ProjectsItem;
 
 public class FragFeaturedProject extends Fragment {
     private View mRootView;
-    private FeaturedProjectData mData;
+    private ProjectsItem mData;
 
-    public FragFeaturedProject(FeaturedProjectData data){
+    public FragFeaturedProject(ProjectsItem data){
         mData = data;
     }
     @SuppressLint("InflateParams")
@@ -49,9 +52,14 @@ public class FragFeaturedProject extends Fragment {
     }
 
     private void initControls() {
-        ((TextView) mRootView.findViewById(R.id.tv_frag_featured_project_title)).setText(mData == null || mData.mStrLabel == null ? "" : mData.mStrLabel);
-        ((TextView) mRootView.findViewById(R.id.tv_frag_featured_project_content)).setText(mData == null || mData.mStrContent == null ? "" : mData.mStrContent);
-        ((ImageView)mRootView.findViewById(R.id.iv_frag_featured_project_image)).setImageResource(mData == null ? 0 : mData.m_nDrawableResId);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_featured_project_title)).setText(mData == null || mData.getTitle() == null ? "" : mData.getTitle());
+        ((TextView) mRootView.findViewById(R.id.tv_frag_featured_project_content)).setText(mData == null || mData.getDescription() == null ? "" : mData.getDescription());
+      //  ((ImageView)mRootView.findViewById(R.id.iv_frag_featured_project_image)).setImageResource(mData == null ? 0 : mData.getImg());
+        Glide.with(requireContext())
+                .load(Constant.IMG_PATH + mData.getImg())
+                .placeholder(R.color.white_alpha)
+                .into((ImageView)mRootView.findViewById(R.id.iv_frag_featured_project_image));
+
         initFonts();
     }
 

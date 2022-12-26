@@ -12,16 +12,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.circular.circular.CircularApplication;
+import com.circular.circular.Constant;
 import com.circular.circular.MainActivity;
 import com.circular.circular.R;
 import com.circular.circular.SignUpActivity;
 import com.circular.circular.TocActivity;
 import com.circular.circular.dialog.ConfirmDialogInterface;
 import com.circular.circular.dialog.DialogConfirm;
+import com.circular.circular.local.PreferenceRepository;
+import com.circular.circular.local.TinyDbManager;
 import com.circular.circular.utils.Utils;
+import com.circular.circular.view_model.LoginViewModel;
+import com.circular.circular.view_model.RegisterViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 public class FragSignUp extends Fragment {
     private View mRootView;
@@ -29,12 +38,21 @@ public class FragSignUp extends Fragment {
     private EditText mEdLastName;
     private EditText mEdEmail;
     private EditText mEdPhone;
+    private EditText mEdPassword;
+    private RegisterViewModel viewModel;
+    private LoginViewModel loginViewModel;
+
+    PreferenceRepository preferenceRepository;
 
 
     @SuppressLint("InflateParams")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.frag_signup, null);
+        viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+        preferenceRepository = new PreferenceRepository();
         initControls();
         return mRootView;
     }
@@ -44,6 +62,7 @@ public class FragSignUp extends Fragment {
         mEdLastName     = mRootView.findViewById(R.id.ed_frag_signup_lastname);
         mEdEmail        = mRootView.findViewById(R.id.ed_frag_signup_email);
         mEdPhone        = mRootView.findViewById(R.id.ed_frag_signup_phone);
+        mEdPassword     = mRootView.findViewById(R.id.ed_frag_signup_password);
 
         mRootView.findViewById(R.id.tv_frag_signup_submit).setOnClickListener(view -> {
             if (mEdFirstName.getText().toString().isEmpty()){
@@ -71,27 +90,34 @@ public class FragSignUp extends Fragment {
                 mEdPhone.requestFocus();
                 return;
             }
-            DialogConfirm dlg = new DialogConfirm(requireActivity(),
-                    R.layout.dlg_confirm_proceed,
-                    R.id.tv_dlg_confirm_proceed_yes,
-                    R.id.tv_dlg_confirm_proceed_no,
-                    R.id.tv_dlg_confirm_proceed_msg,
-                    getString(R.string.confirm_proceed_msg),
-                    new ConfirmDialogInterface() {
-                        @Override
-                        public void onClickedConfirm() {
-                            Intent intent = new Intent(requireActivity(), MainActivity.class);
-                            startActivity(intent);
-                            requireActivity().finish();
-                        }
 
-                        @Override
-                        public void onClickedNo() {
+            if (mEdPassword.getText().toString().isEmpty()){
+                Toast.makeText(getActivity(), getString(R.string.enter_password), Toast.LENGTH_LONG).show();
+                mEdPhone.requestFocus();
+                return;
+            }
 
-                        }
-                    });
-            dlg.show();
-            Utils.setDialogWidth(dlg, 0.8f, requireActivity());
+            String first_name = mEdFirstName.getText().toString();
+            String last_name = mEdLastName.getText().toString();
+            String email = mEdEmail.getText().toString();
+            String number = mEdPhone.getText().toString();
+            String password = mEdPassword.getText().toString();
+            String device_key = Constant.DEVICE_KEY;
+
+            viewModel.register(first_name,last_name,email,number, password,device_key);
+            viewModel._register.observe(getViewLifecycleOwner(), response -> {
+                if (response != null) {
+                    if (response.isLoading()) {
+                        showLoading();
+                    } else if (!response.getError().isEmpty()) {
+                         hideLoading();
+                        showSnackBar(response.getError());
+                    } else if (response.getData().getData() != null) {
+                        loginUser(email, password,Constant.DEVICE_KEY);
+                    }
+                }
+            });
+
         });
 
         mRootView.findViewById(R.id.tv_frag_signup_login).setOnClickListener(view ->
@@ -114,6 +140,61 @@ public class FragSignUp extends Fragment {
         initFonts();
     }
 
+    private void loginUser(String email, String password, String deviceKey) {
+        loginViewModel.login(email, password,deviceKey);
+        loginViewModel._loginData.observe(getViewLifecycleOwner(), response -> {
+            if (response != null) {
+                if (response.isLoading()) {
+                    showLoading();
+                } else if (!response.getError().isEmpty()) {
+                    hideLoading();
+                    showSnackBar(response.getError());
+                } else if (response.getData().getData() != null) {
+                    hideLoading();
+                    preferenceRepository.setString("token", "Bearer " + response.getData().getData().getToken());
+                    TinyDbManager.saveUserData(response.getData().getData().getUser());
+                    showDialogue();
+                }
+            }
+        });
+    }
+
+    private void showLoading() {
+        ((ConstraintLayout)mRootView.findViewById(R.id.loading)).setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoading() {
+        ((ConstraintLayout)mRootView.findViewById(R.id.loading)).setVisibility(View.GONE);
+    }
+
+    private void showDialogue() {
+        DialogConfirm dlg = new DialogConfirm(requireActivity(),
+                R.layout.dlg_confirm_proceed,
+                R.id.tv_dlg_confirm_proceed_yes,
+                R.id.tv_dlg_confirm_proceed_no,
+                R.id.tv_dlg_confirm_proceed_msg,
+                getString(R.string.confirm_proceed_msg),
+                new ConfirmDialogInterface() {
+                    @Override
+                    public void onClickedConfirm() {
+                        Intent intent = new Intent(requireActivity(), MainActivity.class);
+                        startActivity(intent);
+                        requireActivity().finish();
+                        requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    }
+
+                    @Override
+                    public void onClickedNo() {
+
+                    }
+                });
+        dlg.show();
+        Utils.setDialogWidth(dlg, 0.8f, requireActivity());
+    }
+
+    private void showSnackBar(String msg) {
+        Snackbar.make(requireView(), msg, Snackbar.LENGTH_SHORT).show();
+    }
     private void initFonts(){
         ((TextView)mRootView.findViewById(R.id.tv_frag_signup_title)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
         ((EditText)mRootView.findViewById(R.id.ed_frag_signup_firstname)).setTypeface(CircularApplication.mTfMainRegular);
@@ -124,5 +205,13 @@ public class FragSignUp extends Fragment {
         ((TextView)mRootView.findViewById(R.id.tv_frag_signup_submit)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
         ((TextView)mRootView.findViewById(R.id.tv_frag_signup_forgot_pwd)).setTypeface(CircularApplication.mTfMainRegular);
         ((TextView)mRootView.findViewById(R.id.tv_frag_signup_login)).setTypeface(CircularApplication.mTfMainRegular);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        viewModel._register.removeObservers(this);
+        viewModel = null;
     }
 }

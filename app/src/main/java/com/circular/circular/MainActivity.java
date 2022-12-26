@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.circular.circular.dialog.ConfirmDialogInterface;
 import com.circular.circular.dialog.DialogConfirm;
 import com.circular.circular.fragments.FragAbout;
@@ -25,8 +28,11 @@ import com.circular.circular.fragments.FragHistory;
 import com.circular.circular.fragments.FragNotifications;
 import com.circular.circular.fragments.FragReportDataMain;
 import com.circular.circular.fragments.FragResetPwdRequestSuccessful;
+import com.circular.circular.local.PreferenceRepository;
+import com.circular.circular.local.TinyDbManager;
 import com.circular.circular.model.ReportDataField;
 import com.circular.circular.utils.Utils;
+import com.circular.circular.view_model.DataPointsViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -44,6 +50,10 @@ public class MainActivity extends AppCompatActivity
             R.id.iv_main_footer_history_inactive,
             R.id.iv_main_footer_notification_inactive
     };
+
+    private DataPointsViewModel viewModel;
+    PreferenceRepository repository;
+
 
     private int[] m_ArrIvActiveFooterIds = new int[]{
             R.id.iv_main_footer_dashboard_active,
@@ -63,9 +73,28 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         m_nMainFooterCurActiveIndex = -1;
+        repository = new PreferenceRepository();
+        viewModel = new ViewModelProvider(this).get(DataPointsViewModel.class);
+
+        setProfileImage();
         initAnimation();
         initControls();
         showOrHideShowMenu(true);
+    }
+
+    private void setProfileImage() {
+        try {
+
+            if (TinyDbManager.getUserInformation() != null){
+                Glide.with(MainActivity.this)
+                        .load(Constant.IMG_PATH + TinyDbManager.getUserInformation().getProfilePic())
+                        .placeholder(R.color.white_alpha)
+                        .into((ImageView) findViewById(R.id.iv_main_avatar));
+            }
+
+        }catch (NullPointerException | IllegalStateException e){
+            e.printStackTrace();
+        }
     }
 
     private void initAnimation() {
@@ -127,6 +156,8 @@ public class MainActivity extends AppCompatActivity
                         new ConfirmDialogInterface() {
                             @Override
                             public void onClickedConfirm() {
+                                TinyDbManager.clearUser();
+                                clearSharedPreferances();
                                 Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -146,6 +177,18 @@ public class MainActivity extends AppCompatActivity
             return true;
         });
         initFonts();
+    }
+
+    private void clearSharedPreferances() {
+        SharedPreferences myPrefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        myPrefs.edit().remove(Constant.SH_KEY_SELECTED_INDUSTRY).apply();
+        myPrefs.edit().remove(Constant.SH_KEY_SELECTED_TEAM_SIZE).apply();
+        myPrefs.edit().remove(Constant.SH_KEY_SELECTED_BUDGET).apply();
+        myPrefs.edit().remove(Constant.SH_KEY_SELECTED_IMPACTS).apply();
+        myPrefs.edit().remove(Constant.SH_KEY_SELECTED_REPORT_DATA_FIELDS).apply();
+        myPrefs.edit().remove(Constant.PROFILE_ACTIVITY_STARTUP_FRAG).apply();
+        myPrefs.edit().remove(Constant.UPDATE_PROFILE_STARTUP_ACTION).apply();
+
     }
 
     private void initMainFooter() {
@@ -197,32 +240,64 @@ public class MainActivity extends AppCompatActivity
         } else if (iNewIndex == 1) {
             initFragmentInMainActivity(R.id.fl_main_container, new FragAbout(), iNewIndex, m_nMainFooterCurActiveIndex, true);
         } else if (iNewIndex == 2) {
-            if (checkIfEmptyReportDataFields()) {
-                DialogConfirm dlg = new DialogConfirm(this,
-                        R.layout.dlg_confirm_proceed,
-                        R.id.tv_dlg_confirm_proceed_yes,
-                        R.id.tv_dlg_confirm_proceed_no,
-                        R.id.tv_dlg_confirm_proceed_msg,
-                        getString(R.string.no_report_data_field_set),
-                        new ConfirmDialogInterface() {
-                            @Override
-                            public void onClickedConfirm() {
-                                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                                intent.putExtra(Constant.PROFILE_ACTIVITY_STARTUP_FRAG, "report_data_field_setting");
-                                startActivity(intent);
-                                initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), iNewIndex, m_nMainFooterCurActiveIndex, true);
+            try {
+                String token = repository.getString("token");
+                viewModel.getPoints(token);
+                viewModel._data_points.observe(this ,  response -> {
+                    if (response != null){
+                        if (response.isLoading()) {
+                            // showLoading();
+                        } else if (!response.getError().isEmpty()) {
+                            //hideLoading();
+                            //showSnackBar(response.getError());
+                        } else if (response.getData().getData() != null) {
+                            // hideLoading();
+
+                            if (response.getData().getData().getAssignedPreference() != null){
+                                if (response.getData().getData().getAssignedPreference().size() > 0){
+                                    initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), iNewIndex, m_nMainFooterCurActiveIndex, true);
+                                }else {
+                                    switchClass();
+                                }
+                            }else {
+                                switchClass();
                             }
 
-                            @Override
-                            public void onClickedNo() {
-                                initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), iNewIndex, m_nMainFooterCurActiveIndex, true);
-                            }
-                        });
-                dlg.show();
-                Utils.setDialogWidth(dlg, 0.8f, this);
-            } else {
-                initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), iNewIndex, m_nMainFooterCurActiveIndex, true);
+                        }
+                    }
+
+                });
+            }catch (NullPointerException | IllegalStateException e){
+                e.printStackTrace();
             }
+
+
+//            if (checkIfEmptyReportDataFields()) {
+//                DialogConfirm dlg = new DialogConfirm(this,
+//                        R.layout.dlg_confirm_proceed,
+//                        R.id.tv_dlg_confirm_proceed_yes,
+//                        R.id.tv_dlg_confirm_proceed_no,
+//                        R.id.tv_dlg_confirm_proceed_msg,
+//                        getString(R.string.no_report_data_field_set),
+//                        new ConfirmDialogInterface() {
+//                            @Override
+//                            public void onClickedConfirm() {
+//                                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+//                                intent.putExtra(Constant.PROFILE_ACTIVITY_STARTUP_FRAG, "report_data_field_setting");
+//                                startActivity(intent);
+//                                initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), iNewIndex, m_nMainFooterCurActiveIndex, true);
+//                            }
+//
+//                            @Override
+//                            public void onClickedNo() {
+//                                initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), iNewIndex, m_nMainFooterCurActiveIndex, true);
+//                            }
+//                        });
+//                dlg.show();
+//                Utils.setDialogWidth(dlg, 0.8f, this);
+//            } else {
+//                initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), iNewIndex, m_nMainFooterCurActiveIndex, true);
+//            }
         } else if (iNewIndex == 3) {
             initFragmentInMainActivity(R.id.fl_main_container, new FragHistory(), iNewIndex, m_nMainFooterCurActiveIndex, true);
         } else if (iNewIndex == 4) {
@@ -241,6 +316,31 @@ public class MainActivity extends AppCompatActivity
         findViewById(m_ArrIvActiveFooterIds[iNewIndex]).setVisibility(View.VISIBLE);
 
         m_nMainFooterCurActiveIndex = iNewIndex;
+    }
+
+    private void switchClass() {
+        DialogConfirm dlg = new DialogConfirm(this,
+                R.layout.dlg_confirm_proceed,
+                R.id.tv_dlg_confirm_proceed_yes,
+                R.id.tv_dlg_confirm_proceed_no,
+                R.id.tv_dlg_confirm_proceed_msg,
+                getString(R.string.no_report_data_field_set),
+                new ConfirmDialogInterface() {
+                    @Override
+                    public void onClickedConfirm() {
+                        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                        intent.putExtra(Constant.PROFILE_ACTIVITY_STARTUP_FRAG, "report_data_field_setting");
+                        startActivity(intent);
+                        initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), 2, m_nMainFooterCurActiveIndex, true);
+                    }
+
+                    @Override
+                    public void onClickedNo() {
+                        initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), 2, m_nMainFooterCurActiveIndex, true);
+                    }
+                });
+        dlg.show();
+        Utils.setDialogWidth(dlg, 0.8f, this);
     }
 
     public void initFragment(int id, Fragment frag, boolean bAnimation) {

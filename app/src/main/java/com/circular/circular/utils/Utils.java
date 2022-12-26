@@ -1,8 +1,16 @@
 package com.circular.circular.utils;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.WindowManager;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Utils {
     public static void setDialogWidth(Dialog dlg, float fRate){
@@ -23,5 +31,23 @@ public class Utils {
         layoutParams.width = width;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         dlg.getWindow().setAttributes(layoutParams);
+    }
+
+    public static String formatDate(String earningPeriod) {
+        String inputPattern = "yyyy-MM-dd";
+        String outputPattern = "dd MMM yyyy";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+        Date date = null;
+        String str = null;
+
+        try {
+            date = inputFormat.parse(earningPeriod);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 }

@@ -2,12 +2,15 @@ package com.circular.circular;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.circular.circular.fragments.FragTocMain;
+import com.circular.circular.local.TinyDbManager;
 
 public class TocActivity extends AppCompatActivity {
     @Override
@@ -15,6 +18,8 @@ public class TocActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_toc);
+
+        setProfileImage();
 
         initFragment(R.id.fl_toc_container, new FragTocMain(), false);
 
@@ -26,6 +31,21 @@ public class TocActivity extends AppCompatActivity {
             Intent intent = new Intent(TocActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void setProfileImage() {
+        try {
+
+            if (TinyDbManager.getUserInformation() != null){
+                Glide.with(TocActivity.this)
+                        .load(Constant.IMG_PATH + TinyDbManager.getUserInformation().getProfilePic())
+                        .placeholder(R.color.white_alpha)
+                        .into((ImageView) findViewById(R.id.iv_toc_avatar));
+            }
+
+        }catch (NullPointerException | IllegalStateException e){
+            e.printStackTrace();
+        }
     }
 
     public void initFragment(int id, Fragment frag, boolean bAnimation){

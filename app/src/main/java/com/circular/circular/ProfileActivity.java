@@ -1,13 +1,16 @@
 package com.circular.circular;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.circular.circular.fragments.FragUpdateProfileMain;
 import com.circular.circular.fragments.FragUpdateProfilePreferences;
+import com.circular.circular.local.TinyDbManager;
 
 public class ProfileActivity extends AppCompatActivity {
     @Override
@@ -15,6 +18,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_profile);
+
+        setProfileImage();
         findViewById(R.id.iv_act_update_profile_back_menu).setOnClickListener(view-> onBackPressed());
         if (getIntent() != null && getIntent().getExtras() != null){
             Bundle bundle = getIntent().getExtras();
@@ -32,6 +37,22 @@ public class ProfileActivity extends AppCompatActivity {
             initFragment(R.id.fl_act_update_profile_container, new FragUpdateProfileMain(), false);
         }
     }
+
+    private void setProfileImage() {
+        try {
+
+            if (TinyDbManager.getUserInformation() != null){
+                Glide.with(ProfileActivity.this)
+                        .load(Constant.IMG_PATH + TinyDbManager.getUserInformation().getProfilePic())
+                        .placeholder(R.color.white_alpha)
+                        .into((ImageView) findViewById(R.id.iv_act_update_profile_avatar));
+            }
+
+        }catch (NullPointerException | IllegalStateException e){
+            e.printStackTrace();
+        }
+    }
+
 
     public void initFragment(int id, Fragment frag, boolean bAnimation){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

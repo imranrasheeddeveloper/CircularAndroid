@@ -17,6 +17,7 @@
     <string name="signup_last_name">Last Name</string>
     <string name="signup_email">Email</string>
     <string name="signup_phone">Phone</string>
+    <string name="signup_password">Password</string>
     <string name="submit">SUBMIT</string>
     <string name="signup_toc">By Submitting, You agree to Terms &amp; Conditions</string>
     <string name="signup_login">Login To Account</string>
@@ -25,6 +26,8 @@
     <string name="enter_email">Please Enter Your Email!</string>
     <string name="enter_valid_email">Please Enter Valid Email!</string>
     <string name="enter_phone">Please Enter Your Phone!</string>
+    <string name="enter_password">Please Enter Your Password!</string>
+
     <string name="signin_title">LOGIN</string>
     <string name="signin_email_username">Email / Username</string>
     <string name="signin_pwd">Password</string>
@@ -128,5 +131,7 @@
 
     <string name="coming_soon">This feature is coming soon.</string>
     <string name="privacy_policy_title">Privacy Policy</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -57,7 +57,7 @@
 
             </LinearLayout>
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_act_update_profile_avatar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"

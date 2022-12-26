@@ -1,6 +1,7 @@
 package com.circular.circular.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -10,119 +11,196 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.circular.circular.CircularApplication;
 import com.circular.circular.R;
+import com.circular.circular.local.PreferenceRepository;
+import com.circular.circular.model.DashboardData;
 import com.circular.circular.model.FeaturedProjectData;
+import com.circular.circular.model.ProjectsItem;
+import com.circular.circular.model.ReportsItem;
 import com.circular.circular.ui.BarChartWithLabel;
 import com.circular.circular.ui.ChartRoot;
 import com.circular.circular.ui.SliderAdapterFeaturedProject;
+import com.circular.circular.view_model.DashboardViewModel;
+import com.google.android.material.snackbar.Snackbar;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FragDashboard extends Fragment {
     private View mRootView;
-//    private BarChart mCtReportedData;
+    //    private BarChart mCtReportedData;
     private boolean m_bShowDetailsStatus = false;
     private ChartRoot mChart;
+    private DashboardViewModel viewModel;
+    PreferenceRepository preferenceRepository;
+
 
     @SuppressLint("InflateParams")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.frag_dashboard, null);
+        viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        preferenceRepository = new PreferenceRepository();
+        getDetails();
         initControls();
         return mRootView;
     }
 
-    private void initControls(){
+    private void getDetails() {
+        String token = preferenceRepository.getString("token");
+        viewModel.getDashboardData(token);
+        viewModel._dashboard.observe(getViewLifecycleOwner(), response -> {
+            if (response != null) {
+                if (response.isLoading()) {
+                    showLoading();
+                } else if (!response.getError().isEmpty()) {
+                    hideLoading();
+                    showSnackBar(response.getError());
+                } else if (response.getData().isStatus()) {
+                    hideLoading();
+                    if (response.getData().getData() != null) {
+                        setData(response.getData().getData());
+                    }
+                }
+            }
+        });
+    }
+
+    private void setData(DashboardData data) {
+
+        try {
+
+            String report_count = String.valueOf(data.getStatistics().getReportCount());
+            String project_count = String.valueOf(data.getStatistics().getProjectCount());
+            String stake_holder = String.valueOf(data.getStatistics().getStakeHolderCount());
+            String investment = String.valueOf(data.getStatistics().getInvestorCount());
+
+            ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_your_data_reports_value)).setText(report_count);
+            ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_your_total_green_initiatives_value)).setText(project_count);
+            ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_our_total_stakeholders_value)).setText(stake_holder);
+            ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_our_total_funding_partners_value)).setText(investment);
+
+            if (data.getReports() != null) {
+                initChart1(data.getReports());
+            }
+
+            if (data.getProjects() != null) {
+                initSlider(data.getProjects());
+            }
+
+        } catch (NullPointerException | IllegalStateException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showSnackBar(String msg) {
+        Snackbar.make(requireView(), msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void initControls() {
 //        initChart();
         mChart = mRootView.findViewById(R.id.ct_frag_dashboard_reported_data_root);
-        initChart1();
 
-        mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_show_hide_details1).setOnClickListener(view->{
+
+        mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_show_hide_details1).setOnClickListener(view -> {
             m_bShowDetailsStatus = !m_bShowDetailsStatus;
-            if (m_bShowDetailsStatus){
-                ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_show_hide_details1))
+            if (m_bShowDetailsStatus) {
+                ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_show_hide_details1))
                         .setTextColor(getResources().getColor(R.color.red));
                 mChart.showChartLabels();
-            }else{
-                ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_show_hide_details1))
+            } else {
+                ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_show_hide_details1))
                         .setTextColor(getResources().getColor(android.R.color.darker_gray));
                 mChart.hideChartLabels();
             }
         });
-        initSlider();
+
         initFonts();
     }
 
-    private void initChart1(){
-        DisplayMetrics metrics = new DisplayMetrics();
-        requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        ArrayList<BarChartWithLabel> arrCharts = new ArrayList<>();
-        int nChartWidth = metrics.widthPixels / 15;
-        int nPadding = metrics.widthPixels / 150;
-        mChart.setBarWidth(nChartWidth);
-        String[] strTitle = new String[]{
-                "Co2 productivity",
-                "Energy productivity",
-                "Material productivity",
-                "Freshwater resources",
-                "Mineral resources",
-                "R&D expenditure",
-                "Energy pricing",
-                "Water pricing",
-                "Environment-related innovation",
-                "Patents of importance",
-                "Wildlife resources",
-                "Sewage treatment",
-                "Drinking water",
-                "Co2 productivity",
-                "Energy productivity",
-                "Material productivity",
-                "Freshwater resources",
-                "Mineral resources",
-                "R&D expenditure",
-                "Energy pricing",
-                "Water pricing",
-                "Environment-related innovation",
-                "Patents of importance",
-                "Wildlife resources",
-                "Sewage treatment"
-        };
-        for (int i = 0; i < 25; i++){
-            BarChartWithLabel chartGraph = new BarChartWithLabel(getContext());
-            chartGraph.setMaxHeight(250);
-            chartGraph.setHorizontalPadding(nPadding);
-            chartGraph.setMaxValue(250);
-            chartGraph.setWidth(nChartWidth);
-            chartGraph.setValue((int)(Math.random() * 100.0f) + 150);
-            chartGraph.setColor(getResources().getColor(R.color.blue));
-            chartGraph.setLabel(strTitle[i]);
-            chartGraph.setTypeface(CircularApplication.mTfMainRegular);
-            chartGraph.setTopDown(false);
-            chartGraph.setFontSize(12);
-            chartGraph.setPadding(0, 10, 0, 10);
-            arrCharts.add(chartGraph);
+    private void initChart1(List<ReportsItem> reports) {
+        try {
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            requireActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            ArrayList<BarChartWithLabel> arrCharts = new ArrayList<>();
+            int nChartWidth = metrics.widthPixels / 15;
+            int nPadding = metrics.widthPixels / 150;
+            mChart.setBarWidth(nChartWidth);
+//        String[] strTitle = new String[]{
+//                "Co2 productivity",
+//                "Energy productivity",
+//                "Material productivity",
+//                "Freshwater resources",
+//                "Mineral resources",
+//                "R&D expenditure",
+//                "Energy pricing",
+//                "Water pricing",
+//                "Environment-related innovation",
+//                "Patents of importance",
+//                "Wildlife resources",
+//                "Sewage treatment",
+//                "Drinking water",
+//                "Co2 productivity",
+//                "Energy productivity",
+//                "Material productivity",
+//                "Freshwater resources",
+//                "Mineral resources",
+//                "R&D expenditure",
+//                "Energy pricing",
+//                "Water pricing",
+//                "Environment-related innovation",
+//                "Patents of importance",
+//                "Wildlife resources",
+//                "Sewage treatment"
+//        };
+//        chartGraph.setValue((int)(Math.random() * 100.0f) + 150);
+
+            for (int i = 0; i < reports.size(); i++) {
+                BarChartWithLabel chartGraph = new BarChartWithLabel(getContext());
+                chartGraph.setMaxHeight(50);
+                chartGraph.setHorizontalPadding(nPadding);
+                chartGraph.setMaxValue(50);
+                chartGraph.setWidth(nChartWidth);
+                chartGraph.setValue(reports.get(i).getDataCount());
+                chartGraph.setColor(Color.parseColor("#FF00a85a"));
+                chartGraph.setLabel(reports.get(i).getName());
+                chartGraph.setTypeface(CircularApplication.mTfMainRegular);
+                chartGraph.setTopDown(false);
+                chartGraph.setFontSize(14);
+                chartGraph.setPadding(0, 10, 0, 10);
+                arrCharts.add(chartGraph);
+            }
+            mChart.setBarCharts(arrCharts);
+            mChart.invalidateAllCharts();
+            mChart.hideChartLabels();
+
+
+        } catch (NullPointerException | IllegalStateException | NumberFormatException e) {
+            e.printStackTrace();
         }
-        mChart.setBarCharts(arrCharts);
-        mChart.invalidateAllCharts();
-        mChart.hideChartLabels();
     }
 
-    private void initSlider(){
+    private void initSlider(List<ProjectsItem> projects) {
         SliderView sliderView = mRootView.findViewById(R.id.slider_dashboard);
         SliderAdapterFeaturedProject mSliderAdapter = new SliderAdapterFeaturedProject(requireActivity());
         sliderView.setSliderAdapter(mSliderAdapter);
         ArrayList<FeaturedProjectData> arrData = new ArrayList<>();
-        int [] arrDrawables = new int[]{R.drawable.dummy_slide1, R.drawable.dummy_slide2, R.drawable.dummy_slide3, R.drawable.dummy_slide4};
-        for (int i = 0; i < 4; i++){
+        int[] arrDrawables = new int[]{R.drawable.dummy_slide1, R.drawable.dummy_slide2, R.drawable.dummy_slide3, R.drawable.dummy_slide4};
+        for (int i = 0; i < 4; i++) {
             arrData.add(new FeaturedProjectData(arrDrawables[i],
                     "Inspection team inspects ongoing circular project along Makoko",
                     getString(R.string.dummy_featured_project_content)));
         }
-        mSliderAdapter.renewItems(arrData);
+        mSliderAdapter.renewItems(projects);
     }
 
 //    private void initChart(){
@@ -214,18 +292,34 @@ public class FragDashboard extends Fragment {
 //        }
 //    }
 
-    private void initFonts(){
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_title)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_your_data_reports_title)).setTypeface(CircularApplication.mTfMainRegular);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_your_data_reports_value)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_your_total_green_initiatives_title)).setTypeface(CircularApplication.mTfMainRegular);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_your_total_green_initiatives_value)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_our_total_funding_partners_title)).setTypeface(CircularApplication.mTfMainRegular);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_our_total_funding_partners_value)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_our_total_stakeholders_title)).setTypeface(CircularApplication.mTfMainRegular);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_our_total_stakeholders_value)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_indicator_title1)).setTypeface(CircularApplication.mTfMainRegular);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_show_hide_details1)).setTypeface(CircularApplication.mTfMainRegular);
-        ((TextView)mRootView.findViewById(R.id.tv_frag_dashboard_featured_projects_title)).setTypeface(CircularApplication.mTfMainRegular);
+    private void initFonts() {
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_title)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_your_data_reports_title)).setTypeface(CircularApplication.mTfMainRegular);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_your_data_reports_value)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_your_total_green_initiatives_title)).setTypeface(CircularApplication.mTfMainRegular);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_your_total_green_initiatives_value)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_our_total_funding_partners_title)).setTypeface(CircularApplication.mTfMainRegular);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_our_total_funding_partners_value)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_our_total_stakeholders_title)).setTypeface(CircularApplication.mTfMainRegular);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_our_total_stakeholders_value)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_indicator_title1)).setTypeface(CircularApplication.mTfMainRegular);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_reported_data_show_hide_details1)).setTypeface(CircularApplication.mTfMainRegular);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_featured_projects_title)).setTypeface(CircularApplication.mTfMainRegular);
+    }
+
+    private void showLoading() {
+        ((ConstraintLayout) mRootView.findViewById(R.id.home_loading)).setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoading() {
+        ((ConstraintLayout) mRootView.findViewById(R.id.home_loading)).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        viewModel._dashboard.removeObservers(this);
+        viewModel = null;
     }
 }
