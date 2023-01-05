@@ -79,7 +79,7 @@ public class FragReportDataMain extends Fragment {
         repository = new PreferenceRepository();
         getAssignedPreferences();
         initData();
-        initControls();
+        //initControls();
     }
 
     private void getAssignedPreferences() {
@@ -91,12 +91,17 @@ public class FragReportDataMain extends Fragment {
                     showLoading();
                 } else if (!response.getError().isEmpty()) {
                     hideLoading();
-                    showSnackBar(response.getError());
+                    if (response.getError().isEmpty() || response.getError() == null){
+                        showSnackBar("Something went wrong!!");
+                    }else {
+                        showSnackBar(response.getError());
+                    }
                 } else if (response.getData().getData() != null) {
                     hideLoading();
 
                     if (response.getData().getData().getAssignedPreference() != null){
                         assignedPreferenceItems.addAll(response.getData().getData().getAssignedPreference());
+                        initControls();
                     }
 
                 }
@@ -146,7 +151,7 @@ public class FragReportDataMain extends Fragment {
 
     private void initControls() {
         mLvData = mRootView.findViewById(R.id.lv_frag_report_data_main_data);
-        mAdapter = new ReportDataMainItemAdapter(requireActivity(), mArrData);
+        mAdapter = new ReportDataMainItemAdapter(requireActivity(), assignedPreferenceItems.get(0).getDataPoints());
         mLvData.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         ((BaseAdapter) mLvData.getAdapter()).notifyDataSetChanged();
@@ -158,9 +163,9 @@ public class FragReportDataMain extends Fragment {
             List<Integer> data_ids = new ArrayList<>();
             List<Integer> data_values = new ArrayList<>();
 
-            for (int i = 0; i < mArrData.size(); i++) {
-                data_ids.add(mArrData.get(i).getId());
-                data_values.add(Integer.valueOf(mArrData.get(i).getName()));
+            for (int i = 0; i < assignedPreferenceItems.get(0).getDataPoints().size(); i++) {
+                data_ids.add(assignedPreferenceItems.get(0).getDataPoints().get(i).getId());
+                data_values.add(Integer.valueOf(assignedPreferenceItems.get(0).getDataPoints().get(i).getName()));
             }
 
             JsonObject object = new JsonObject();
@@ -185,7 +190,11 @@ public class FragReportDataMain extends Fragment {
                                         showLoading();
                                     } else if (!response.getError().isEmpty()) {
                                         hideLoading();
-                                        showSnackBar(response.getError());
+                                        if (response.getError().isEmpty() || response.getError() == null){
+                                            showSnackBar("Something went wrong!!");
+                                        }else {
+                                            showSnackBar(response.getError());
+                                        }
                                     } else if (response.getData().isStatus()) {
                                         hideLoading();
                                         Intent intent = new Intent(requireContext(), MainActivity.class);

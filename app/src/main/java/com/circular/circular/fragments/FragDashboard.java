@@ -63,7 +63,11 @@ public class FragDashboard extends Fragment {
                     showLoading();
                 } else if (!response.getError().isEmpty()) {
                     hideLoading();
-                    showSnackBar(response.getError());
+                    if (response.getError().isEmpty() || response.getError() == null){
+                        showSnackBar("Something went wrong!!");
+                    }else {
+                        showSnackBar(response.getError());
+                    }
                 } else if (response.getData().isStatus()) {
                     hideLoading();
                     if (response.getData().getData() != null) {

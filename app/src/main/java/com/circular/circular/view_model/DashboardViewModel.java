@@ -8,6 +8,10 @@ import com.circular.circular.model.DashboardModel;
 import com.circular.circular.remote.RemoteRepository;
 import com.circular.circular.remote.ResponseWrapper;
 
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -36,11 +40,18 @@ public class DashboardViewModel extends ViewModel {
 
                     @Override
                     public void onError(Throwable e) {
-                        dashboard.setValue(new ResponseWrapper<>(
-                                false,
-                                e.getLocalizedMessage(),
-                                null
-                        ));
+                        if (e instanceof HttpException) {
+                            ResponseBody body = ((HttpException) e).response().errorBody();
+                            try {
+                                dashboard.setValue(new ResponseWrapper<>(
+                                        false,
+                                        body.string(),
+                                        null
+                                ));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
                     }
 
                     @Override

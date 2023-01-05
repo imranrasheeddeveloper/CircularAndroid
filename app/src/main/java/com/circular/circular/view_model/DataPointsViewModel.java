@@ -9,8 +9,11 @@ import com.circular.circular.model.data_points.DataPointsModel;
 import com.circular.circular.remote.RemoteRepository;
 import com.circular.circular.remote.ResponseWrapper;
 
+import java.io.IOException;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -42,11 +45,18 @@ public class DataPointsViewModel extends ViewModel {
 
                     @Override
                     public void onError(Throwable e) {
-                        data_points.setValue(new ResponseWrapper<>(
-                                false,
-                                e.getLocalizedMessage(),
-                                null
-                        ));
+                        if (e instanceof HttpException) {
+                            ResponseBody body = ((HttpException) e).response().errorBody();
+                            try {
+                                data_points.setValue(new ResponseWrapper<>(
+                                        false,
+                                        body.string(),
+                                        null
+                                ));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
                     }
 
                     @Override
@@ -79,11 +89,18 @@ public class DataPointsViewModel extends ViewModel {
 
                     @Override
                     public void onError(Throwable e) {
-                        create_pref.setValue(new ResponseWrapper<>(
-                                false,
-                                e.getLocalizedMessage(),
-                                null
-                        ));
+                        if (e instanceof HttpException) {
+                            ResponseBody body = ((HttpException) e).response().errorBody();
+                            try {
+                                create_pref.setValue(new ResponseWrapper<>(
+                                        false,
+                                        body.string(),
+                                        null
+                                ));
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
                     }
 
                     @Override

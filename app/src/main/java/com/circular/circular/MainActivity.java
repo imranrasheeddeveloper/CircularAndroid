@@ -180,6 +180,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void clearSharedPreferances() {
+        repository.setString(Constant.SH_KEY_SELECTED_INDUSTRY,"");
+        repository.setString(Constant.SH_KEY_SELECTED_TEAM_SIZE,"");
+        repository.setString(Constant.SH_KEY_SELECTED_BUDGET,"");
+        repository.setString(Constant.SH_KEY_SELECTED_IMPACTS,"");
+
         SharedPreferences myPrefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         myPrefs.edit().remove(Constant.SH_KEY_SELECTED_INDUSTRY).apply();
         myPrefs.edit().remove(Constant.SH_KEY_SELECTED_TEAM_SIZE).apply();

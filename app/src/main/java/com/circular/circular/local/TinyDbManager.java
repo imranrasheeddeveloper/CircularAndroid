@@ -15,6 +15,7 @@ public class TinyDbManager {
     public static final String KEY_USER = "key_user";
     public static final String KEY_PASSWORD = "key_password";
     private static final String KEY_DATA_POINTS = "key_data_point";
+    private static final String KEY_USER_TYPE = "key_user_type";
 
 
     public static void saveUserData(User data) {
@@ -31,6 +32,17 @@ public class TinyDbManager {
     public static void clearUser() {
         TinyDB tinyDB = new TinyDB(CircularApplication.applicationContext);
         tinyDB.remove(KEY_USER);
+    }
+
+    public static void saveUserType(String data) {
+        TinyDB tinyDB = new TinyDB(CircularApplication.applicationContext);
+        tinyDB.putString(KEY_USER_TYPE, data);
+        Log.e("user_type", " saved !");
+    }
+
+    public static String getUserType() {
+        TinyDB tinyDB = new TinyDB(CircularApplication.applicationContext);
+        return tinyDB.getString(KEY_USER_TYPE);
     }
 
 

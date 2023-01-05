@@ -78,7 +78,7 @@
     <!-- FragDashboard-->
     <string name="your_total_data_reports">Data Reports</string>
     <string name="your_total_green_initiatives">Projects</string>
-    <string name="our_total_funding_partners">Funding</string>
+    <string name="our_total_funding_partners">Investors</string>
     <string name="our_total_stakeholders">Stakeholders</string>
     <string name="reported_data_indicator_title">Reported Data Indicator</string>
     <string name="reported_data_show_details_title">Show Details</string>

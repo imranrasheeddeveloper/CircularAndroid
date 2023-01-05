@@ -163,7 +163,11 @@ public class FragUpdateProfilePreferences extends Fragment {
                     showLoading();
                 } else if (!response.getError().isEmpty()) {
                     hideLoading();
-                    showSnackBar(response.getError());
+                    if (response.getError().isEmpty() || response.getError() == null){
+                        showSnackBar("Something went wrong!!");
+                    }else {
+                        showSnackBar(response.getError());
+                    }
                 } else if (response.getData().getData() != null) {
                     hideLoading();
 
@@ -265,24 +269,8 @@ public class FragUpdateProfilePreferences extends Fragment {
                         new ConfirmDialogInterface() {
                             @Override
                             public void onClickedConfirm() {
-                                String token = repository.getString("token");
-                                String name = TinyDbManager.getUserInformation().getName() + " " + TinyDbManager.getUserInformation().getLastName();
-                                viewModel.createPreferences(token, name, selected_data_points);
-                                viewModel._create_pref.observe(getViewLifecycleOwner(), response -> {
-                                    if (response != null) {
-                                        if (response.isLoading()) {
-                                            showLoading();
-                                        } else if (!response.getError().isEmpty()) {
-                                            hideLoading();
-                                            showSnackBar(response.getError());
-                                        } else if (response.getData().getData() != null) {
-                                            for (int i = 0; i < selected_data.size(); i++) {
-                                                TinyDbManager.saveDataPoints(selected_data.get(i));
-                                            }
-                                            requireActivity().onBackPressed();
-                                        }
-                                    }
-                                });
+                                createPrefrenceApi();
+
                             }
 
                             @Override
@@ -343,6 +331,8 @@ public class FragUpdateProfilePreferences extends Fragment {
             Utils.setDialogWidth(dlg, 0.8f, requireActivity());
         });
 
+
+
         mRootView.findViewById(R.id.ll_frag_update_profile_preference_industry_root).setOnClickListener(view -> {
             handleIndustryRootClickEvent();
         });
@@ -366,7 +356,45 @@ public class FragUpdateProfilePreferences extends Fragment {
         });
     }
 
+    private void createPrefrenceApi() {
+        String token = repository.getString("token");
+        String name = TinyDbManager.getUserInformation().getName() + " " + TinyDbManager.getUserInformation().getLastName();
+        viewModel.createPreferences(token, name, selected_data_points);
+        viewModel._create_pref.observe(getViewLifecycleOwner(), response -> {
+            if (response != null) {
+                if (response.isLoading()) {
+                    showLoading();
+                } else if (!response.getError().isEmpty()) {
+                    hideLoading();
+                    if (response.getError().isEmpty() || response.getError() == null){
+                        showSnackBar("Something went wrong!!");
+                    }else {
+                        showSnackBar(response.getError());
+                    }
+                } else if (response.getData().getData() != null) {
+                    for (int i = 0; i < selected_data.size(); i++) {
+                        TinyDbManager.saveDataPoints(selected_data.get(i));
+                    }
+                    requireActivity().onBackPressed();
+                }
+            }
+        });
+    }
+
     private void initFonts() {
+        if (!repository.getString(Constant.SH_KEY_SELECTED_INDUSTRY).isEmpty()){
+            ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry)).setText(repository.getString(Constant.SH_KEY_SELECTED_INDUSTRY));
+        }
+        if (!repository.getString(Constant.SH_KEY_SELECTED_TEAM_SIZE).isEmpty()){
+            ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_team_size)).setText(repository.getString(Constant.SH_KEY_SELECTED_TEAM_SIZE));
+        }
+        if (!repository.getString(Constant.SH_KEY_SELECTED_BUDGET).isEmpty()){
+            ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_green_project_budget)).setText(repository.getString(Constant.SH_KEY_SELECTED_BUDGET));
+        }
+        if (!repository.getString(Constant.SH_KEY_SELECTED_IMPACTS).isEmpty()){
+            ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_impacts_of_project)).setText(repository.getString(Constant.SH_KEY_SELECTED_IMPACTS));
+        }
+
         ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preferences_title)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
         ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry)).setTypeface(CircularApplication.mTfMainRegular);
         ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry_hint)).setTypeface(CircularApplication.mTfMainRegular);
@@ -491,6 +519,8 @@ public class FragUpdateProfilePreferences extends Fragment {
                             SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireActivity().getPackageName(), Context.MODE_PRIVATE);
                             sharedPreferences.edit().putString(Constant.SH_KEY_SELECTED_INDUSTRY,
                                     ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry)).getText().toString()).apply();
+                            repository.setString(Constant.SH_KEY_SELECTED_INDUSTRY,
+                                    ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_industry)).getText().toString());
                         }
 
                         @Override
@@ -549,6 +579,8 @@ public class FragUpdateProfilePreferences extends Fragment {
                             SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireActivity().getPackageName(), Context.MODE_PRIVATE);
                             sharedPreferences.edit().putString(Constant.SH_KEY_SELECTED_TEAM_SIZE,
                                     ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_team_size)).getText().toString()).apply();
+                            repository.setString(Constant.SH_KEY_SELECTED_TEAM_SIZE,
+                                    ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_team_size)).getText().toString());
                         }
 
                         @Override
@@ -602,9 +634,12 @@ public class FragUpdateProfilePreferences extends Fragment {
                             SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireActivity().getPackageName(), Context.MODE_PRIVATE);
                             sharedPreferences.edit().putString(Constant.SH_KEY_SELECTED_BUDGET,
                                     ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_green_project_budget)).getText().toString()).apply();
+                            repository.setString(Constant.SH_KEY_SELECTED_BUDGET,
+                                    ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_green_project_budget)).getText().toString());
+
                         }
 
-                        @Override
+                            @Override
                         public void onClickedNo() {
 
                         }
@@ -655,6 +690,9 @@ public class FragUpdateProfilePreferences extends Fragment {
                             SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireActivity().getPackageName(), Context.MODE_PRIVATE);
                             sharedPreferences.edit().putString(Constant.SH_KEY_SELECTED_IMPACTS,
                                     ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_impacts_of_project)).getText().toString()).apply();
+                            repository.setString(Constant.SH_KEY_SELECTED_IMPACTS,
+                                    ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_preference_impacts_of_project)).getText().toString());
+
                         }
 
                         @Override
@@ -807,6 +845,7 @@ public class FragUpdateProfilePreferences extends Fragment {
                             }
                             setPieChartData(PREFERENCES_COUNT);
                             saveCurrentSelectedReportDataFields();
+                            createPrefrenceApi();
                         }
 
                         @Override

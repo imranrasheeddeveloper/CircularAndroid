@@ -79,6 +79,11 @@ public class FragSignIn extends Fragment {
                         showSnackBar(response.getError());
                     } else if (response.getData().getData() != null) {
                         hideLoading();
+                        if (response.getData().getData().getUser().getIsApiUser() == 1){
+                            TinyDbManager.saveUserType("App User");
+                        }else {
+                            TinyDbManager.saveUserType("Web User");
+                        }
                         preferenceRepository.setString("token", "Bearer " + response.getData().getData().getToken());
                         TinyDbManager.saveUserData(response.getData().getData().getUser());
                         showDialogue(response.getData().getData().getUser().isIsPasswordChanged(),password);

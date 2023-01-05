@@ -5,8 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Constant {
-    public static final String BASE_URL = "https://staging.circulartestserver.com.ng/public/api/";
-    public static final String IMG_PATH = "https://staging.circulartestserver.com.ng/public/images/";
+//    public static final String BASE_URL = "https://staging.circulartestserver.com.ng/public/api/";
+    public static final String BASE_URL = "https://lasgcircularapp.com.ng/public/api/";
+    public static final String IMG_PATH = "https://lasgcircularapp.com.ng/public/images/";
     public static final String SH_KEY_SELECTED_INDUSTRY = "selected_industry";
     public static final String SH_KEY_SELECTED_TEAM_SIZE = "selected_team_size";
     public static final String SH_KEY_SELECTED_BUDGET = "selected_budget";

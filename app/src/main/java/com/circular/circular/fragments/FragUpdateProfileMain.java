@@ -107,6 +107,7 @@ public class FragUpdateProfileMain extends Fragment {
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         repository = new PreferenceRepository();
         setProfileData();
+
         initData();
         initControls();
         return mRootView;
@@ -114,6 +115,12 @@ public class FragUpdateProfileMain extends Fragment {
 
     private void setProfileData() {
         try {
+
+            if (TinyDbManager.getUserType().equalsIgnoreCase("App User")){
+                mRootView.findViewById(R.id.tv_frag_update_profile_main_data_report_preference_edit).setVisibility(View.VISIBLE);
+            }else {
+                mRootView.findViewById(R.id.tv_frag_update_profile_main_data_report_preference_edit).setVisibility(View.GONE);
+            }
 
         if (TinyDbManager.getUserInformation() != null){
             User user = TinyDbManager.getUserInformation();
@@ -171,6 +178,7 @@ public class FragUpdateProfileMain extends Fragment {
         }
     }
     private void initControls() {
+
         mRootView.findViewById(R.id.tv_frag_update_profile_main_data_report_preference_edit).setOnClickListener(view -> {
             if (requireActivity() instanceof ProfileActivity) {
                 FragUpdateProfilePreferences frag = new FragUpdateProfilePreferences();
@@ -249,7 +257,11 @@ public class FragUpdateProfileMain extends Fragment {
                     showLoading();
                 } else if (!response.getError().isEmpty()) {
                     hideLoading();
-                    showSnackBar(response.getError());
+                    if (response.getError().isEmpty() || response.getError() == null){
+                        showSnackBar("Something went wrong!!");
+                    }else {
+                        showSnackBar(response.getError());
+                    }
                 } else if (response.getData().isStatus()) {
                     hideLoading();
                     TinyDbManager.saveUserData(response.getData().getData().getUser());

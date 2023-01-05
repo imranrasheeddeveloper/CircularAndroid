@@ -111,7 +111,11 @@ public class FragSignUp extends Fragment {
                         showLoading();
                     } else if (!response.getError().isEmpty()) {
                          hideLoading();
-                        showSnackBar(response.getError());
+                        if (response.getError().isEmpty() || response.getError() == null){
+                            showSnackBar("Something went wrong!!");
+                        }else {
+                            showSnackBar(response.getError());
+                        }
                     } else if (response.getData().getData() != null) {
                         loginUser(email, password,Constant.DEVICE_KEY);
                     }
@@ -148,7 +152,11 @@ public class FragSignUp extends Fragment {
                     showLoading();
                 } else if (!response.getError().isEmpty()) {
                     hideLoading();
-                    showSnackBar(response.getError());
+                    if (response.getError().isEmpty() || response.getError() == null){
+                        showSnackBar("Something went wrong!!");
+                    }else {
+                        showSnackBar(response.getError());
+                    }
                 } else if (response.getData().getData() != null) {
                     hideLoading();
                     preferenceRepository.setString("token", "Bearer " + response.getData().getData().getToken());
