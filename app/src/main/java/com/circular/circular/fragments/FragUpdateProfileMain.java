@@ -47,8 +47,11 @@ import com.circular.circular.local.PreferenceRepository;
 import com.circular.circular.local.TinyDbManager;
 import com.circular.circular.model.ReportDataField;
 import com.circular.circular.model.User;
+import com.circular.circular.model.data_points.AssignedPreferenceItem;
+import com.circular.circular.model.data_points.DataPointsItem;
 import com.circular.circular.utils.GetRealPathFromUri;
 import com.circular.circular.utils.Utils;
+import com.circular.circular.view_model.DataPointsViewModel;
 import com.circular.circular.view_model.ProfileViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonObject;
@@ -60,6 +63,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -70,6 +74,8 @@ public class FragUpdateProfileMain extends Fragment {
     private View mRootView;
     private ProfileViewModel viewModel;
     MultipartBody.Part multiPart;
+    private DataPointsViewModel dataPointsViewModel;
+
     PreferenceRepository repository;
     private final String[] arrLocalization = new String[]{
             "Alimosho Local Government",
@@ -98,6 +104,7 @@ public class FragUpdateProfileMain extends Fragment {
     private ArrayList<String> mArrLocalization;
     private ArrayList<String> mArrIndustry;
     private ArrayList<String> mArrReminder;
+    private List<AssignedPreferenceItem> assignedPreferenceItems;
     private ArrayList<ReportDataField> mArrReportDataField = new ArrayList<>();
 
     @SuppressLint("InflateParams")
@@ -105,8 +112,12 @@ public class FragUpdateProfileMain extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.frag_update_profile_main, null);
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        dataPointsViewModel = new ViewModelProvider(this).get(DataPointsViewModel.class);
         repository = new PreferenceRepository();
+        assignedPreferenceItems = new ArrayList<>();
+
         setProfileData();
+        getAssignedPreferences();
 
         initData();
         initControls();
@@ -159,24 +170,55 @@ public class FragUpdateProfileMain extends Fragment {
         for (i = 0; i < arrReminder.length; i++) {
             mArrReminder.add(arrReminder[i]);
         }
-        initSelectedReportDataFields();
+      //  initSelectedReportDataFields();
     }
 
-    private void initSelectedReportDataFields() {
-        mArrReportDataField = new ArrayList<>();
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireActivity().getPackageName(),
-                Context.MODE_PRIVATE);
-        String strJSON = sharedPreferences.getString(Constant.SH_KEY_SELECTED_REPORT_DATA_FIELDS, "[]");
-        JSONArray arrJson = null;
-        try {
-            arrJson = new JSONArray(strJSON);
-            for (int i = 0; i < arrJson.length(); i++) {
-                mArrReportDataField.add(new ReportDataField(arrJson.getJSONObject(i)));
+    private void getAssignedPreferences() {
+        String token = repository.getString("token");
+        dataPointsViewModel.getPoints(token);
+        dataPointsViewModel._data_points.observe(getViewLifecycleOwner() ,  response -> {
+            if (response != null){
+                if (response.isLoading()) {
+                    showLoading();
+                } else if (!response.getError().isEmpty()) {
+                    hideLoading();
+                    if (response.getError().isEmpty() || response.getError() == null){
+                        showSnackBar("Something went wrong!!");
+                    }else {
+                        showSnackBar(response.getError());
+                    }
+                } else if (response.getData().getData() != null) {
+                    hideLoading();
+
+                    if (response.getData().getData().getAssignedPreference() != null){
+                        assignedPreferenceItems.addAll(response.getData().getData().getAssignedPreference());
+                        if (assignedPreferenceItems.size() > 0){
+                            handleReportDataFields();
+                        }
+                    }
+
+                }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        });
     }
+
+
+//    private void initSelectedReportDataFields() {
+//        mArrReportDataField = new ArrayList<>();
+//        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireActivity().getPackageName(),
+//                Context.MODE_PRIVATE);
+//        String strJSON = sharedPreferences.getString(Constant.SH_KEY_SELECTED_REPORT_DATA_FIELDS, "[]");
+//        JSONArray arrJson = null;
+//        try {
+//            arrJson = new JSONArray(strJSON);
+//            for (int i = 0; i < arrJson.length(); i++) {
+//                mArrReportDataField.add(new ReportDataField(arrJson.getJSONObject(i)));
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
     private void initControls() {
 
         mRootView.findViewById(R.id.tv_frag_update_profile_main_data_report_preference_edit).setOnClickListener(view -> {
@@ -240,7 +282,6 @@ public class FragUpdateProfileMain extends Fragment {
         ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_industry_content)).setAdapter(mAdapterIndustry);
         mAdapterReminder = new SpinnerTextViewAdapter(requireActivity(), mArrReminder);
         ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setAdapter(mAdapterReminder);
-        handleReportDataFields();
         initFonts();
     }
 
@@ -331,7 +372,8 @@ public class FragUpdateProfileMain extends Fragment {
         int iCurrentRowWidth = 0;
         LinearLayout llRow = null;
 
-        for (int i = 0; i < mArrReportDataField.size(); i++) {
+        for (int i = 0; i < assignedPreferenceItems.get(0).getDataPoints().size(); i++) {
+            DataPointsItem dataPointsItem = assignedPreferenceItems.get(0).getDataPoints().get(i);
             if (llRow == null) {
                 llRow = new LinearLayout(requireActivity());
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -340,14 +382,13 @@ public class FragUpdateProfileMain extends Fragment {
                 llRow.setLayoutParams(lp);
                 llRoot.addView(llRow);
             }
-            ReportDataField reportDataField = mArrReportDataField.get(i);
             RelativeLayout rlItem = (RelativeLayout) inflater.inflate(R.layout.report_data_field_item, null);
-            rlItem.setTag(reportDataField);
+            rlItem.setTag(dataPointsItem);
             LinearLayout.LayoutParams lpItem = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             rlItem.setLayoutParams(lpItem);
-            ((TextView) rlItem.findViewById(R.id.tv_report_data_field_item_title)).setText(reportDataField.mStrName);
+            ((TextView) rlItem.findViewById(R.id.tv_report_data_field_item_title)).setText(dataPointsItem.getName());
             ((TextView) rlItem.findViewById(R.id.tv_report_data_field_item_title)).setTypeface(CircularApplication.mTfMainRegular);
             rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_blue_with_black_corner_normal);            rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.GONE);
             rlItem.findViewById(R.id.tv_report_data_field_item_hint).setVisibility(View.GONE);

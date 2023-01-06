@@ -61,6 +61,7 @@ public class FragReportDataMain extends Fragment {
     private ReportDataViewModel reportDataViewModel;
     private List<AssignedPreferenceItem> assignedPreferenceItems;
 
+
     @SuppressLint("InflateParams")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -140,9 +141,7 @@ public class FragReportDataMain extends Fragment {
         mArrData = new ArrayList<>();
         try {
             if (TinyDbManager.getSelectedDatPoints().size() > 0){
-                for (int i = 0; i < TinyDbManager.getSelectedDatPoints().size(); i++) {
-                    mArrData.add(TinyDbManager.getSelectedDatPoints().get(i));
-                }
+                mArrData.addAll(TinyDbManager.getSelectedDatPoints());
             }
         } catch (NullPointerException |IllegalArgumentException |IllegalStateException e) {
             e.printStackTrace();

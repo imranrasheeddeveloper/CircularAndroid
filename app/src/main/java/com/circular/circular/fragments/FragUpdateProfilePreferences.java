@@ -31,6 +31,7 @@ import com.circular.circular.dialog.DialogMessageWithNoButtons;
 import com.circular.circular.local.PreferenceRepository;
 import com.circular.circular.local.TinyDbManager;
 import com.circular.circular.model.ReportDataField;
+import com.circular.circular.model.data_points.AssignedPreferenceItem;
 import com.circular.circular.model.data_points.DataPointsItem;
 import com.circular.circular.model.data_points.DataTypesItem;
 import com.circular.circular.utils.Utils;
@@ -103,6 +104,7 @@ public class FragUpdateProfilePreferences extends Fragment {
     };
     private List<Integer> selected_data_points;
     private List<DataPointsItem> selected_data;
+    private List<AssignedPreferenceItem> assignedPreferenceItems;
 
 //    private final String[] mArrReportFields = new String[]{
 //            "Measured Co2 Emission",
@@ -137,6 +139,8 @@ public class FragUpdateProfilePreferences extends Fragment {
         viewModel = new ViewModelProvider(this).get(DataPointsViewModel.class);
         repository = new PreferenceRepository();
         dataPoints = new ArrayList<>();
+        assignedPreferenceItems = new ArrayList<>();
+
         //industryTypes = new ArrayList<>();
 
         selected_data_points = new ArrayList<>();
@@ -178,6 +182,9 @@ public class FragUpdateProfilePreferences extends Fragment {
                         dataPoints.addAll(response.getData().getData().getDataPoints());
                     }
 
+                    if (response.getData().getData().getAssignedPreference() != null){
+                        assignedPreferenceItems.addAll(response.getData().getData().getAssignedPreference());
+                    }
 
                 }
             }
@@ -259,7 +266,7 @@ public class FragUpdateProfilePreferences extends Fragment {
     private void initEvents() {
 
         mRootView.findViewById(R.id.tv_frag_update_profile_preference_complete_setup).setOnClickListener(view -> {
-            if (mArrReportDataField.size() > 0) {
+            if (selected_data_points.size() > 0) {
                 DialogConfirm dlg = new DialogConfirm(requireActivity(),
                         R.layout.dlg_confirm_proceed,
                         R.id.tv_dlg_confirm_proceed_yes,
@@ -357,6 +364,13 @@ public class FragUpdateProfilePreferences extends Fragment {
     }
 
     private void createPrefrenceApi() {
+        for(int i = 0; i < selected_data_points.size();i++) {
+            for (int j = i+1 ; j < selected_data_points.size(); j++) {
+                if (selected_data_points.get(i).equals(selected_data_points.get(j))) {
+                    selected_data_points.remove(i);
+                }
+            }
+        }
         String token = repository.getString("token");
         String name = TinyDbManager.getUserInformation().getName() + " " + TinyDbManager.getUserInformation().getLastName();
         viewModel.createPreferences(token, name, selected_data_points);
@@ -755,17 +769,22 @@ public class FragUpdateProfilePreferences extends Fragment {
             rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_white_with_black_corner_normal);
             int finalI = i;
             rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setOnClickListener(view -> {
-                selected_data_points.add(dataPoints.get(finalI).getId());
-                selected_data.add(dataPoints.get(finalI));
+
                 rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.VISIBLE);
                 rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_blue_with_black_corner_normal);
-                ReportDataField reportDataFieldSelected = (ReportDataField) rlItem.getTag();
-                for (int j = 0; j < mArrReportDataField.size(); j++) {
-                    if (mArrReportDataField.get(j).equals(reportDataFieldSelected)) {
-                        return;
-                    }
+                if (selected_data_points.contains(dataPoints.get(finalI).getId())){
+                    return;
+                }else {
+                    selected_data_points.add(dataPoints.get(finalI).getId());
+                    selected_data.add(dataPoints.get(finalI));
                 }
-                mArrReportDataField.add(reportDataFieldSelected);
+//                ReportDataField reportDataFieldSelected = (ReportDataField) rlItem.getTag();
+//                for (int j = 0; j < mArrReportDataField.size(); j++) {
+//                    if (mArrReportDataField.get(j).equals(reportDataFieldSelected)) {
+//                        return;
+//                    }
+//                }
+//                mArrReportDataField.add(reportDataFieldSelected);
             });
             rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.GONE);
             rlItem.findViewById(R.id.iv_report_data_field_item_remove).setOnClickListener(view -> {
@@ -803,13 +822,23 @@ public class FragUpdateProfilePreferences extends Fragment {
                 dlg.show();
                 Utils.setDialogWidth(dlg, 0.8f, requireActivity());
             });
-            for (int j = 0; j < mArrReportDataField.size(); j++) {
-                if (mArrReportDataField.get(j).equals(reportDataField)) {
+            for (int j = 0; j < assignedPreferenceItems.get(0).getDataPoints().size(); j++) {
+                DataPointsItem dataPointsItem = assignedPreferenceItems.get(0).getDataPoints().get(j);
+                if (dataPointsItem.getDescription().equals(reportDataField.mStrName)) {
+                    selected_data.add(dataPointsItem);
+                    selected_data_points.add(dataPointsItem.getId());
                     rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.VISIBLE);
                     rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_blue_with_black_corner_normal);
                     break;
                 }
             }
+//           for (int j = 0; j < mArrReportDataField.size(); j++) {
+//                if (mArrReportDataField.get(j).equals(reportDataField)) {
+//                    rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.VISIBLE);
+//                    rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_blue_with_black_corner_normal);
+//                    break;
+//                }
+//            }
             rlItem.measure(0, 0);
             int nItemWidth = rlItem.getMeasuredWidth();
             if (iCurrentRowWidth == 0 && nItemWidth + 140 > metrics.widthPixels) {
