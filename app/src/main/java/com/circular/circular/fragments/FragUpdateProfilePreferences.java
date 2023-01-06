@@ -759,7 +759,7 @@ public class FragUpdateProfilePreferences extends Fragment {
             }
             ReportDataField reportDataField = new ReportDataField(dataPoints.get(i).getDescription());
             RelativeLayout rlItem = (RelativeLayout) inflater.inflate(R.layout.report_data_field_item, null);
-            rlItem.setTag(reportDataField);
+            rlItem.setTag(dataPoints.get(i).getDescription());
             LinearLayout.LayoutParams lpItem = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -800,16 +800,16 @@ public class FragUpdateProfilePreferences extends Fragment {
                     }
                 }
 
-                ReportDataField reportDataFieldSelected = (ReportDataField) rlItem.getTag();
-                if (reportDataFieldSelected != null) {
-
-                    for (int j = 0; j < mArrReportDataField.size(); j++) {
-                        if (mArrReportDataField.get(j).equals(reportDataFieldSelected)) {
-                            mArrReportDataField.remove(j);
-                            return;
-                        }
-                    }
-                }
+//                ReportDataField reportDataFieldSelected = (ReportDataField) rlItem.getTag();
+//                if (reportDataFieldSelected != null) {
+//
+//                    for (int j = 0; j < mArrReportDataField.size(); j++) {
+//                        if (mArrReportDataField.get(j).equals(reportDataFieldSelected)) {
+//                            mArrReportDataField.remove(j);
+//                            return;
+//                        }
+//                    }
+//                }
             });
 
             rlItem.findViewById(R.id.tv_report_data_field_item_hint).setOnClickListener(view->{
@@ -822,14 +822,20 @@ public class FragUpdateProfilePreferences extends Fragment {
                 dlg.show();
                 Utils.setDialogWidth(dlg, 0.8f, requireActivity());
             });
-            for (int j = 0; j < assignedPreferenceItems.get(0).getDataPoints().size(); j++) {
-                DataPointsItem dataPointsItem = assignedPreferenceItems.get(0).getDataPoints().get(j);
-                if (dataPointsItem.getDescription().equals(reportDataField.mStrName)) {
-                    selected_data.add(dataPointsItem);
-                    selected_data_points.add(dataPointsItem.getId());
-                    rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.VISIBLE);
-                    rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_blue_with_black_corner_normal);
-                    break;
+            if (assignedPreferenceItems != null && assignedPreferenceItems.size() > 0) {
+                for (int j = 0; j < assignedPreferenceItems.get(0).getDataPoints().size(); j++) {
+                    DataPointsItem dataPointsItem = assignedPreferenceItems.get(0).getDataPoints().get(j);
+                    if (dataPointsItem.getDescription().equals(reportDataField.mStrName)) {
+                        if (!selected_data_points.contains(dataPointsItem.getId())){
+                            selected_data_points.add(dataPointsItem.getId());
+                            selected_data.add(dataPointsItem);
+                        }
+                        rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.VISIBLE);
+                        rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_blue_with_black_corner_normal);
+                        break;
+                    }else {
+
+                    }
                 }
             }
 //           for (int j = 0; j < mArrReportDataField.size(); j++) {
