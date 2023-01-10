@@ -9,7 +9,6 @@ public class DataPointsItem{
 
 	@SerializedName("name")
 	private String name;
-
 	@SerializedName("description")
 	private String description;
 
@@ -46,7 +45,7 @@ public class DataPointsItem{
 		return deletedAt;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

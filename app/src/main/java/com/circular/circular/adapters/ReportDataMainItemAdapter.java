@@ -1,6 +1,7 @@
 package com.circular.circular.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 
 import com.circular.circular.CircularApplication;
 import com.circular.circular.R;
-import com.circular.circular.model.data_points.AssignedPreferenceItem;
 import com.circular.circular.model.data_points.DataPointsItem;
 
 import java.util.ArrayList;
@@ -23,10 +23,11 @@ public class ReportDataMainItemAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private ArrayList<DataPointsItem> mArrData;
     boolean status;
-    public ReportDataMainItemAdapter(Context ctx, List<DataPointsItem> arrData){
+
+    public ReportDataMainItemAdapter(Context ctx, List<DataPointsItem> arrData) {
         mCtx = ctx;
         mArrData = new ArrayList<>();
-        if (arrData != null && arrData.size() > 0){
+        if (arrData != null && arrData.size() > 0) {
             mArrData.addAll(arrData);
         }
         mInflater = LayoutInflater.from(mCtx);
@@ -49,17 +50,19 @@ public class ReportDataMainItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null){
+        if (view == null) {
             view = mInflater.inflate(R.layout.lvitem_report_data_main, null);
         }
-        DataPointsItem item = (DataPointsItem)getItem(i);
+        DataPointsItem item = (DataPointsItem) getItem(i);
         status = true;
+
         ((EditText) view.findViewById(R.id.ed_lvitem_report_data_main_title)).setHint(item.getName());
 
-        ((EditText)view.findViewById(R.id.ed_lvitem_report_data_main_title)).setTypeface(CircularApplication.mTfMainRegular);
+        ((EditText) view.findViewById(R.id.ed_lvitem_report_data_main_title)).setTypeface(CircularApplication.mTfMainRegular);
 
         View finalView = view;
-        ((EditText)view.findViewById(R.id.ed_lvitem_report_data_main_title)).addTextChangedListener(new TextWatcher() {
+        View finalView1 = view;
+        ((EditText) view.findViewById(R.id.ed_lvitem_report_data_main_title)).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -67,25 +70,35 @@ public class ReportDataMainItemAdapter extends BaseAdapter {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                try {
+                    if (count > 0) {
+                        mArrData.get(i).setDescription(s.toString());
+                    }else {
+                        mArrData.get(i).setDescription("0");
+//                      ((EditText) finalView1.findViewById(R.id.ed_lvitem_report_data_main_title)).setHintTextColor(Color.parseColor("#FFec3237"));
+                    }
+                } catch (NumberFormatException e) {
+                    ((EditText) finalView.findViewById(R.id.ed_lvitem_report_data_main_title)).setText("");
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (!s.toString().isEmpty()){
-                    try
-                    {
-                        int w = Integer.parseInt(s.toString());
-                        String data = ((EditText) finalView.findViewById(R.id.ed_lvitem_report_data_main_title)).getText().toString();
-                        mArrData.get(i).setName(data);
-
-                    }catch(NumberFormatException e) {
-                        ((EditText) finalView.findViewById(R.id.ed_lvitem_report_data_main_title)).setText("");
-                        e.printStackTrace();
-                    }
-
-                }
+//                if (!s.toString().isEmpty()){
+//                    try
+//                    {
+//                        int w = Integer.parseInt(s.toString());
+//                        String data = ((EditText) finalView.findViewById(R.id.ed_lvitem_report_data_main_title)).getText().toString();
+//                        mArrData.get(i).setDescription(data);
+//
+//                    }catch(NumberFormatException e) {
+//                        ((EditText) finalView.findViewById(R.id.ed_lvitem_report_data_main_title)).setText("");
+//                        e.printStackTrace();
+//                    }
+//
+//                }
             }
         });
 

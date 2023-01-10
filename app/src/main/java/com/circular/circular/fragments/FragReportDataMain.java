@@ -163,8 +163,15 @@ public class FragReportDataMain extends Fragment {
             List<Integer> data_values = new ArrayList<>();
 
             for (int i = 0; i < assignedPreferenceItems.get(0).getDataPoints().size(); i++) {
+                if (Integer.valueOf(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription()) == 0){
+                    showSnackBar(assignedPreferenceItems.get(0).getDataPoints().get(i).getName() + " is Required.");
+                    return;
+                }
+            }
+
+            for (int i = 0; i < assignedPreferenceItems.get(0).getDataPoints().size(); i++) {
                 data_ids.add(assignedPreferenceItems.get(0).getDataPoints().get(i).getId());
-                data_values.add(Integer.valueOf(assignedPreferenceItems.get(0).getDataPoints().get(i).getName()));
+                data_values.add(Integer.valueOf(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription()));
             }
 
             JsonObject object = new JsonObject();
