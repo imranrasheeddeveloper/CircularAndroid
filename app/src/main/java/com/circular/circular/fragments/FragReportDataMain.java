@@ -162,12 +162,23 @@ public class FragReportDataMain extends Fragment {
             List<Integer> data_ids = new ArrayList<>();
             List<Integer> data_values = new ArrayList<>();
 
+            try {
+
             for (int i = 0; i < assignedPreferenceItems.get(0).getDataPoints().size(); i++) {
-                if (Integer.valueOf(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription()) == 0){
+
+                if (assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription().contains("[-+.^:,]")){
+                    showSnackBar(assignedPreferenceItems.get(0).getDataPoints().get(i).getName() + " is Invalid");
+                    return;
+                }else if (Integer.valueOf(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription()) == 0) {
                     showSnackBar(assignedPreferenceItems.get(0).getDataPoints().get(i).getName() + " is Required.");
                     return;
                 }
             }
+
+            }catch (NumberFormatException e){
+                e.printStackTrace();
+            }
+
 
             for (int i = 0; i < assignedPreferenceItems.get(0).getDataPoints().size(); i++) {
                 data_ids.add(assignedPreferenceItems.get(0).getDataPoints().get(i).getId());
