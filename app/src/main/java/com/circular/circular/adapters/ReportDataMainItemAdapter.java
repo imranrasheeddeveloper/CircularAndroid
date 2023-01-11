@@ -73,14 +73,16 @@ public class ReportDataMainItemAdapter extends BaseAdapter {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     if (count > 0) {
-                        if (s.toString().contains("[-+.^:,]")){
-                            ((EditText) finalView1.findViewById(R.id.ed_lvitem_report_data_main_title)).setTextColor(Color.parseColor("#FFec3237"));
-                        }else {
-                            mArrData.get(i).setDescription(s.toString().replaceAll("[-+.^:,]",""));
-                        }
-//                        if (hasAnySymbolExceptWhitespace(s.toString())){
-//                            ((EditText) finalView1.findViewById(R.id.ed_lvitem_report_data_main_title)).setHintTextColor(Color.parseColor("#FFec3237"));
+                        mArrData.get(i).setDescription(s.toString());
+//                    }
+//                        if (s.toString().contains("[-+.^:,]")){
+//                            ((EditText) finalView1.findViewById(R.id.ed_lvitem_report_data_main_title)).setTextColor(Color.parseColor("#FFec3237"));
+//                        }else {
+//                            mArrData.get(i).setDescription(s.toString().replaceAll("[-+.^:,]",""));
 //                        }
+////                        if (hasAnySymbolExceptWhitespace(s.toString())){
+////                            ((EditText) finalView1.findViewById(R.id.ed_lvitem_report_data_main_title)).setHintTextColor(Color.parseColor("#FFec3237"));
+////                        }
                     }else {
                         mArrData.get(i).setDescription("0");
 //                      ((EditText) finalView1.findViewById(R.id.ed_lvitem_report_data_main_title)).setHintTextColor(Color.parseColor("#FFec3237"));

@@ -48,6 +48,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FragReportDataMain extends Fragment {
     private View mRootView;
@@ -165,8 +167,10 @@ public class FragReportDataMain extends Fragment {
             try {
 
             for (int i = 0; i < assignedPreferenceItems.get(0).getDataPoints().size(); i++) {
-
-                if (assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription().contains("[-+.^:,]")){
+                Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
+                Matcher matcher = pattern.matcher(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription());
+                boolean isStringContainsSpecialCharacter = matcher.find();
+                if (isStringContainsSpecialCharacter){
                     showSnackBar(assignedPreferenceItems.get(0).getDataPoints().get(i).getName() + " is Invalid");
                     return;
                 }else if (Integer.valueOf(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription()) == 0) {
