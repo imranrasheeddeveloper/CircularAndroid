@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +40,9 @@ public class FragSignUp extends Fragment {
     private EditText mEdLastName;
     private EditText mEdEmail;
     private EditText mEdPhone;
-    private EditText mEdPassword;
+    private EditText mEdPassword,mEdConfirmPassword;
     private RegisterViewModel viewModel;
+    private ImageView showPass, showConfirmPass;
     private LoginViewModel loginViewModel;
 
     PreferenceRepository preferenceRepository;
@@ -53,6 +56,7 @@ public class FragSignUp extends Fragment {
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         preferenceRepository = new PreferenceRepository();
+
         initControls();
         return mRootView;
     }
@@ -63,6 +67,36 @@ public class FragSignUp extends Fragment {
         mEdEmail        = mRootView.findViewById(R.id.ed_frag_signup_email);
         mEdPhone        = mRootView.findViewById(R.id.ed_frag_signup_phone);
         mEdPassword     = mRootView.findViewById(R.id.ed_frag_signup_password);
+        mEdConfirmPassword     = mRootView.findViewById(R.id.ed_frag_signup_confirm_password);
+        showPass     = mRootView.findViewById(R.id.show_signup_password);
+        showConfirmPass     = mRootView.findViewById(R.id.show_signup_confirm_password);
+
+        mEdPassword.setTransformationMethod(new PasswordTransformationMethod());
+        mEdConfirmPassword.setTransformationMethod(new PasswordTransformationMethod());
+
+        showPass.setOnClickListener(v -> {
+            if (showPass.getTag().equals("hide")) {
+                mEdPassword.setTransformationMethod(null);
+                showPass.setImageResource(R.drawable.show_password);
+                showPass.setTag("show");
+            } else {
+                mEdPassword.setTransformationMethod(new PasswordTransformationMethod());
+                showPass.setImageResource(R.drawable.hide_password);
+                showPass.setTag("hide");
+            }
+        });
+
+        showConfirmPass.setOnClickListener(v -> {
+            if (showConfirmPass.getTag().equals("hide")) {
+                mEdConfirmPassword.setTransformationMethod(null);
+                showConfirmPass.setImageResource(R.drawable.show_password);
+                showConfirmPass.setTag("show");
+            } else {
+                mEdConfirmPassword.setTransformationMethod(new PasswordTransformationMethod());
+                showConfirmPass.setImageResource(R.drawable.hide_password);
+                showConfirmPass.setTag("hide");
+            }
+        });
 
         mRootView.findViewById(R.id.tv_frag_signup_submit).setOnClickListener(view -> {
             if (mEdFirstName.getText().toString().isEmpty()){
@@ -93,7 +127,19 @@ public class FragSignUp extends Fragment {
 
             if (mEdPassword.getText().toString().isEmpty()){
                 Toast.makeText(getActivity(), getString(R.string.enter_password), Toast.LENGTH_LONG).show();
-                mEdPhone.requestFocus();
+                mEdPassword.requestFocus();
+                return;
+            }
+
+            if (mEdConfirmPassword.getText().toString().isEmpty()){
+                Toast.makeText(getActivity(), getString(R.string.enter_confirm_password), Toast.LENGTH_LONG).show();
+                mEdConfirmPassword.requestFocus();
+                return;
+            }
+
+            if (!mEdConfirmPassword.getText().toString().equalsIgnoreCase(mEdPassword.getText().toString())){
+                Toast.makeText(getActivity(), getString(R.string.incorrect_password), Toast.LENGTH_LONG).show();
+                mEdConfirmPassword.requestFocus();
                 return;
             }
 
