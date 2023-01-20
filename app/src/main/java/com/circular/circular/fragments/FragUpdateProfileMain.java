@@ -305,7 +305,7 @@ public class FragUpdateProfileMain extends Fragment {
         ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setAdapter(mAdapterReminder);
 
         try {
-            if (TinyDbManager.getRemainder() != 0) {
+            if (TinyDbManager.getRemainder() != 6) {
                 int remainder_status = TinyDbManager.getRemainder();
                 if (mArrReminder.size() > remainder_status) {
                     ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setSelection(remainder_status);

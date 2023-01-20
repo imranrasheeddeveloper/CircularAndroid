@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity
                             public void onClickedConfirm() {
                                repository.setString("token","nil");
 
+                               TinyDbManager.saveRemainder(6);
                                 TinyDbManager.clearUser();
                                 clearSharedPreferances();
                                 Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
