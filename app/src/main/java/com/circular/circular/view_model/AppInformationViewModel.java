@@ -29,7 +29,7 @@ public class AppInformationViewModel extends ViewModel {
 
         about_content.setValue(
                 new ResponseWrapper<>(
-                        true, "", null
+                        true, null, null
                 ));
 
         RemoteRepository.getInstance()
@@ -46,15 +46,11 @@ public class AppInformationViewModel extends ViewModel {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody body = ((HttpException) e).response().errorBody();
-                            try {
-                                about_content.setValue(new ResponseWrapper<>(
-                                        false,
-                                        body.string(),
-                                        null
-                                ));
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+                            about_content.setValue(new ResponseWrapper<>(
+                                    false,
+                                    body,
+                                    null
+                            ));
                         }
                     }
 
@@ -62,7 +58,7 @@ public class AppInformationViewModel extends ViewModel {
                     public void onNext(GetAppContentModel model) {
                         about_content.setValue(new ResponseWrapper<>(
                                 false,
-                                "",
+                                null,
                                 model
                         ));
                     }
@@ -74,7 +70,7 @@ public class AppInformationViewModel extends ViewModel {
 
         terms_content.setValue(
                 new ResponseWrapper<>(
-                        true, "", null
+                        true, null, null
                 ));
 
         RemoteRepository.getInstance()
@@ -91,15 +87,11 @@ public class AppInformationViewModel extends ViewModel {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody body = ((HttpException) e).response().errorBody();
-                            try {
-                                terms_content.setValue(new ResponseWrapper<>(
-                                        false,
-                                        body.string(),
-                                        null
-                                ));
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+                            terms_content.setValue(new ResponseWrapper<>(
+                                    false,
+                                    body,
+                                    null
+                            ));
                         }
                     }
 
@@ -107,7 +99,7 @@ public class AppInformationViewModel extends ViewModel {
                     public void onNext(GetAppContentModel model) {
                         terms_content.setValue(new ResponseWrapper<>(
                                 false,
-                                "",
+                                null,
                                 model
                         ));
                     }

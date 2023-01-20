@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class User{
 
 	@SerializedName("profile_pic")
-	private Object profilePic;
+	private String profilePic;
 
 	@SerializedName("last_name")
 	private String lastName;
@@ -43,7 +43,7 @@ public class User{
 	@SerializedName("is_api_user")
 	private int isApiUser;
 
-	public Object getProfilePic(){
+	public String getProfilePic(){
 		return profilePic;
 	}
 

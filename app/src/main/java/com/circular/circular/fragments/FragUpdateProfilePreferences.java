@@ -165,26 +165,34 @@ public class FragUpdateProfilePreferences extends Fragment {
             if (response != null){
                 if (response.isLoading()) {
                     showLoading();
-                } else if (!response.getError().isEmpty()) {
+                } else if (response.getError() != null) {
                     hideLoading();
-                    if (response.getError().isEmpty() || response.getError() == null){
+                    if (response.getError() == null){
                         showSnackBar("Something went wrong!!");
                     }else {
-                        showSnackBar(response.getError());
+                        Constant.getLoginError(CircularApplication.applicationContext,response.getError());
                     }
-                } else if (response.getData().getData() != null) {
+                } else if (response.getData() != null) {
                     hideLoading();
 
-//                    if (response.getData().getData().getDataTypes() != null){
+                    if (response.getData().getErrors() == null){
+                        if (response.getData().getData() != null){
+
+                            //                    if (response.getData().getData().getDataTypes() != null){
 //                        industryTypes.addAll(response.getData().getData().getDataTypes());
 //                    }
-                    if (response.getData().getData().getDataPoints() != null){
-                        dataPoints.addAll(response.getData().getData().getDataPoints());
+                            if (response.getData().getData().getDataPoints() != null){
+                                dataPoints.addAll(response.getData().getData().getDataPoints());
+                            }
+
+                            if (response.getData().getData().getAssignedPreference() != null){
+                                assignedPreferenceItems.addAll(response.getData().getData().getAssignedPreference());
+                            }
+                        }
+                    }else {
+                        showSnackBar(response.getData().getErrors());
                     }
 
-                    if (response.getData().getData().getAssignedPreference() != null){
-                        assignedPreferenceItems.addAll(response.getData().getData().getAssignedPreference());
-                    }
 
                 }
             }
@@ -378,18 +386,25 @@ public class FragUpdateProfilePreferences extends Fragment {
             if (response != null) {
                 if (response.isLoading()) {
                     showLoading();
-                } else if (!response.getError().isEmpty()) {
+                } else if (response.getError() != null) {
                     hideLoading();
-                    if (response.getError().isEmpty() || response.getError() == null){
+                    if (response.getError() != null){
                         showSnackBar("Something went wrong!!");
                     }else {
-                        showSnackBar(response.getError());
+                        Constant.getLoginError(CircularApplication.applicationContext,response.getError());
                     }
-                } else if (response.getData().getData() != null) {
-                    for (int i = 0; i < selected_data.size(); i++) {
-                        TinyDbManager.saveDataPoints(selected_data.get(i));
+                } else if (response.getData() != null) {
+                    hideLoading();
+                    if (response.getData().getErrors() == null) {
+                        if (response.getData().getData() != null) {
+                            for (int i = 0; i < selected_data.size(); i++) {
+                                TinyDbManager.saveDataPoints(selected_data.get(i));
+                            }
+                            requireActivity().onBackPressed();
+                        }
+                    }else {
+                        showSnackBar(response.getData().getErrors());
                     }
-                    requireActivity().onBackPressed();
                 }
             }
         });

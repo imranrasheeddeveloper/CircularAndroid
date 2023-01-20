@@ -15,9 +15,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.circular.circular.CircularApplication;
+import com.circular.circular.Constant;
 import com.circular.circular.R;
 import com.circular.circular.local.PreferenceRepository;
 import com.circular.circular.model.DashboardData;
@@ -41,6 +43,7 @@ public class FragDashboard extends Fragment {
     private ChartRoot mChart;
     private DashboardViewModel viewModel;
     PreferenceRepository preferenceRepository;
+    SwipeRefreshLayout swipe;
 
 
     @SuppressLint("InflateParams")
@@ -49,8 +52,18 @@ public class FragDashboard extends Fragment {
         mRootView = inflater.inflate(R.layout.frag_dashboard, null);
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         preferenceRepository = new PreferenceRepository();
+
+
         getDetails();
         initControls();
+        swipe = mRootView.findViewById(R.id.home_swipe_container);
+
+        swipe.setOnRefreshListener(() -> {
+            getDetails();
+            initControls();
+            swipe.setRefreshing(false);
+        });
+
         return mRootView;
     }
 
@@ -61,17 +74,21 @@ public class FragDashboard extends Fragment {
             if (response != null) {
                 if (response.isLoading()) {
                     showLoading();
-                } else if (!response.getError().isEmpty()) {
+                } else if (response.getError() != null) {
                     hideLoading();
-                    if (response.getError().isEmpty() || response.getError() == null){
+                    if (response.getError() == null){
                         showSnackBar("Something went wrong!!");
                     }else {
-                        showSnackBar(response.getError());
+                        Constant.getLoginError(CircularApplication.applicationContext,response.getError());
                     }
-                } else if (response.getData().isStatus()) {
+                } else if (response.getData() != null) {
                     hideLoading();
-                    if (response.getData().getData() != null) {
-                        setData(response.getData().getData());
+                    if (response.getData().getErrors() == null) {
+                        if (response.getData().getData() != null) {
+                            setData(response.getData().getData());
+                        }
+                    }else {
+                        showSnackBar(response.getData().getErrors());
                     }
                 }
             }

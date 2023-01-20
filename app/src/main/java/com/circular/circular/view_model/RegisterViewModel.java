@@ -26,7 +26,7 @@ public class RegisterViewModel extends ViewModel {
 
         register.setValue(
                 new ResponseWrapper<>(
-                        true, "", null
+                        true, null, null
                 ));
 
         RemoteRepository.getInstance()
@@ -43,15 +43,11 @@ public class RegisterViewModel extends ViewModel {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody body = ((HttpException) e).response().errorBody();
-                            try {
-                                register.setValue(new ResponseWrapper<>(
-                                        false,
-                                         body.string(),
-                                        null
-                                ));
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+                            register.setValue(new ResponseWrapper<>(
+                                    false,
+                                     body,
+                                    null
+                            ));
                         }
                     }
 
@@ -59,7 +55,7 @@ public class RegisterViewModel extends ViewModel {
                     public void onNext(RegisterModel model) {
                         register.setValue(new ResponseWrapper<>(
                                 false,
-                                "",
+                                null,
                                 model
                         ));
                     }

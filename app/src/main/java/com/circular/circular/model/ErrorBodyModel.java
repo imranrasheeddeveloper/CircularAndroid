@@ -1,22 +1,22 @@
-package com.circular.circular.model.data_points;
+package com.circular.circular.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DataPointsModel{
+public class ErrorBodyModel{
 
 	@SerializedName("data")
-	private Data data;
+	private Object data;
 
 	@SerializedName("message")
 	private String message;
 
 	@SerializedName("errors")
-	private String errors;
+	private Errors errors;
 
 	@SerializedName("status")
 	private boolean status;
 
-	public Data getData(){
+	public Object getData(){
 		return data;
 	}
 
@@ -24,7 +24,7 @@ public class DataPointsModel{
 		return message;
 	}
 
-	public String getErrors(){
+	public Errors getErrors(){
 		return errors;
 	}
 

@@ -25,7 +25,7 @@ public class HistoryViewModel extends ViewModel {
 
         history.setValue(
                 new ResponseWrapper<>(
-                        true, "", null
+                        true, null, null
                 ));
 
         RemoteRepository.getInstance()
@@ -42,15 +42,11 @@ public class HistoryViewModel extends ViewModel {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody body = ((HttpException) e).response().errorBody();
-                            try {
-                                history.setValue(new ResponseWrapper<>(
-                                        false,
-                                        body.string(),
-                                        null
-                                ));
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+                            history.setValue(new ResponseWrapper<>(
+                                    false,
+                                    body,
+                                    null
+                            ));
                         }
                     }
 
@@ -58,7 +54,7 @@ public class HistoryViewModel extends ViewModel {
                     public void onNext(HistoryModel model) {
                         history.setValue(new ResponseWrapper<>(
                                 false,
-                                "",
+                                null,
                                 model
                         ));
                     }

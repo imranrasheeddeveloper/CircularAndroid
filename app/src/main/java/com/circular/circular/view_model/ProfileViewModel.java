@@ -32,7 +32,7 @@ public class ProfileViewModel extends ViewModel {
 
         update_user.setValue(
                 new ResponseWrapper<>(
-                        true, "", null
+                        true, null, null
                 ));
 
         RemoteRepository.getInstance()
@@ -49,15 +49,11 @@ public class ProfileViewModel extends ViewModel {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody body = ((HttpException) e).response().errorBody();
-                            try {
-                                update_user.setValue(new ResponseWrapper<>(
-                                        false,
-                                        body.string(),
-                                        null
-                                ));
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+                            update_user.setValue(new ResponseWrapper<>(
+                                    false,
+                                    body,
+                                    null
+                            ));
                         }
                     }
 
@@ -65,7 +61,7 @@ public class ProfileViewModel extends ViewModel {
                     public void onNext(LoginModel model) {
                         update_user.setValue(new ResponseWrapper<>(
                                 false,
-                                "",
+                                null,
                                 model
                         ));
                     }

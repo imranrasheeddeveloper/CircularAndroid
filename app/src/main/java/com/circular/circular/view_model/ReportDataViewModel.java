@@ -28,7 +28,7 @@ public class ReportDataViewModel extends ViewModel {
 
         report.setValue(
                 new ResponseWrapper<>(
-                        true, "", null
+                        true, null, null
                 ));
 
         RemoteRepository.getInstance()
@@ -45,15 +45,11 @@ public class ReportDataViewModel extends ViewModel {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody body = ((HttpException) e).response().errorBody();
-                            try {
-                                report.setValue(new ResponseWrapper<>(
-                                        false,
-                                        body.string(),
-                                        null
-                                ));
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+                            report.setValue(new ResponseWrapper<>(
+                                    false,
+                                    body,
+                                    null
+                            ));
                         }
                     }
 
@@ -61,7 +57,7 @@ public class ReportDataViewModel extends ViewModel {
                     public void onNext(ReportDataModel model) {
                         report.setValue(new ResponseWrapper<>(
                                 false,
-                                "",
+                                null,
                                 model
                         ));
                     }

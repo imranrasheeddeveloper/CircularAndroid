@@ -16,6 +16,7 @@ public class TinyDbManager {
     public static final String KEY_PASSWORD = "key_password";
     private static final String KEY_DATA_POINTS = "key_data_point";
     private static final String KEY_USER_TYPE = "key_user_type";
+    private static final String KEY_REMINDER = "key_reminder";
 
 
     public static void saveUserData(User data) {
@@ -69,4 +70,15 @@ public class TinyDbManager {
         }
         return Items;
     }
+
+    public static void saveRemainder(int data) {
+        TinyDB tinyDB = new TinyDB(CircularApplication.applicationContext);
+        tinyDB.putInt(KEY_REMINDER, data);
+    }
+
+    public static int getRemainder() {
+        TinyDB tinyDB = new TinyDB(CircularApplication.applicationContext);
+        return tinyDB.getInt(KEY_REMINDER);
+    }
+
 }

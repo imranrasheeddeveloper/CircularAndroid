@@ -2,26 +2,26 @@ package com.circular.circular.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,41 +31,34 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.circular.circular.CircularApplication;
 import com.circular.circular.Constant;
 import com.circular.circular.MainActivity;
 import com.circular.circular.ProfileActivity;
 import com.circular.circular.R;
-import com.circular.circular.SignUpActivity;
 import com.circular.circular.adapters.SpinnerTextViewAdapter;
 import com.circular.circular.dialog.ConfirmDialogInterface;
 import com.circular.circular.dialog.DialogConfirm;
-import com.circular.circular.dialog.DialogMessageWithNoButtons;
 import com.circular.circular.local.PreferenceRepository;
 import com.circular.circular.local.TinyDbManager;
 import com.circular.circular.model.ReportDataField;
 import com.circular.circular.model.User;
 import com.circular.circular.model.data_points.AssignedPreferenceItem;
 import com.circular.circular.model.data_points.DataPointsItem;
-import com.circular.circular.utils.GetRealPathFromUri;
+import com.circular.circular.utils.AlarmReceiver;
 import com.circular.circular.utils.Utils;
 import com.circular.circular.view_model.DataPointsViewModel;
 import com.circular.circular.view_model.ProfileViewModel;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -75,6 +68,7 @@ public class FragUpdateProfileMain extends Fragment {
     private ProfileViewModel viewModel;
     MultipartBody.Part multiPart;
     private DataPointsViewModel dataPointsViewModel;
+    Uri profileUri;
 
     PreferenceRepository repository;
     private final String[] arrLocalization = new String[]{
@@ -127,31 +121,31 @@ public class FragUpdateProfileMain extends Fragment {
     private void setProfileData() {
         try {
 
-            if (TinyDbManager.getUserType().equalsIgnoreCase("App User")){
+            if (TinyDbManager.getUserType().equalsIgnoreCase("App User")) {
                 mRootView.findViewById(R.id.tv_frag_update_profile_main_data_report_preference_edit).setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 mRootView.findViewById(R.id.tv_frag_update_profile_main_data_report_preference_edit).setVisibility(View.GONE);
             }
 
-        if (TinyDbManager.getUserInformation() != null){
-            User user = TinyDbManager.getUserInformation();
-            Glide.with(requireContext())
-                    .load(Constant.IMG_PATH + user.getProfilePic())
-                    .placeholder(R.color.white_alpha)
-                    .into((ImageView) mRootView.findViewById(R.id.iv_frag_update_profile_main_info_avatar));
+            if (TinyDbManager.getUserInformation() != null) {
+                User user = TinyDbManager.getUserInformation();
+                Glide.with(requireContext())
+                        .load(Constant.IMG_PATH + user.getProfilePic())
+                        .placeholder(R.color.white_alpha)
+                        .into((ImageView) mRootView.findViewById(R.id.iv_frag_update_profile_main_info_avatar));
 
-            String first_name  = user.getName().replaceAll("[^a-zA-Z0-9]","");
-            String last_name  = user.getLastName().replaceAll("[^a-zA-Z0-9]","");
-            String number  = user.getPhone().replaceAll("[^a-zA-Z0-9]","");
+                String first_name = user.getName().replaceAll("[^a-zA-Z0-9]", "");
+                String last_name = user.getLastName().replaceAll("[^a-zA-Z0-9]", "");
+                String number = user.getPhone().replaceAll("[^a-zA-Z0-9]", "");
 
-            ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_first_name)).setText(first_name);
-            ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_last_name)).setText(last_name);
-            ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).setText(user.getEmail());
-            ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_phone)).setText(number);
+                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_first_name)).setText(first_name);
+                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_last_name)).setText(last_name);
+                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).setText(user.getEmail());
+                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_phone)).setText(number);
 
-        }
+            }
 
-        }catch (NullPointerException | IllegalStateException | NumberFormatException e){
+        } catch (NullPointerException | IllegalStateException | NumberFormatException e) {
             e.printStackTrace();
         }
     }
@@ -170,31 +164,37 @@ public class FragUpdateProfileMain extends Fragment {
         for (i = 0; i < arrReminder.length; i++) {
             mArrReminder.add(arrReminder[i]);
         }
-      //  initSelectedReportDataFields();
+        //  initSelectedReportDataFields();
     }
 
     private void getAssignedPreferences() {
         String token = repository.getString("token");
         dataPointsViewModel.getPoints(token);
-        dataPointsViewModel._data_points.observe(getViewLifecycleOwner() ,  response -> {
-            if (response != null){
+        dataPointsViewModel._data_points.observe(getViewLifecycleOwner(), response -> {
+            if (response != null) {
                 if (response.isLoading()) {
                     showLoading();
-                } else if (!response.getError().isEmpty()) {
+                } else if (response.getError() != null) {
                     hideLoading();
-                    if (response.getError().isEmpty() || response.getError() == null){
+                    if (response.getError() == null) {
                         showSnackBar("Something went wrong!!");
-                    }else {
-                        showSnackBar(response.getError());
+                    } else {
+                        Constant.getLoginError(CircularApplication.applicationContext, response.getError());
                     }
-                } else if (response.getData().getData() != null) {
+                } else if (response.getData() != null) {
                     hideLoading();
 
-                    if (response.getData().getData().getAssignedPreference() != null){
-                        assignedPreferenceItems.addAll(response.getData().getData().getAssignedPreference());
-                        if (assignedPreferenceItems.size() > 0){
-                            handleReportDataFields();
+                    if (response.getData().getErrors() == null) {
+                        if (response.getData().getData() != null) {
+                            if (response.getData().getData().getAssignedPreference() != null) {
+                                assignedPreferenceItems.addAll(response.getData().getData().getAssignedPreference());
+                                if (assignedPreferenceItems.size() > 0) {
+                                    handleReportDataFields();
+                                }
+                            }
                         }
+                    } else {
+                        showSnackBar(response.getData().getErrors());
                     }
 
                 }
@@ -204,7 +204,7 @@ public class FragUpdateProfileMain extends Fragment {
     }
 
 
-//    private void initSelectedReportDataFields() {
+    //    private void initSelectedReportDataFields() {
 //        mArrReportDataField = new ArrayList<>();
 //        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(requireActivity().getPackageName(),
 //                Context.MODE_PRIVATE);
@@ -232,39 +232,60 @@ public class FragUpdateProfileMain extends Fragment {
             }
         });
 
-        mRootView.findViewById(R.id.tv_frag_update_profile_main_update).setOnClickListener(view->{
+        mRootView.findViewById(R.id.tv_frag_update_profile_main_update).setOnClickListener(view -> {
 
-            if (((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_first_name)).getText().toString().isEmpty()){
+            if (((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_first_name)).getText().toString().isEmpty()) {
                 Toast.makeText(getActivity(), getString(R.string.enter_first_name), Toast.LENGTH_LONG).show();
-                ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_first_name)).requestFocus();
+                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_first_name)).requestFocus();
                 return;
             }
-            if (((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_last_name)).getText().toString().isEmpty()){
+            if (((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_last_name)).getText().toString().isEmpty()) {
                 Toast.makeText(getActivity(), getString(R.string.enter_last_name), Toast.LENGTH_LONG).show();
-                ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_last_name)).requestFocus();
+                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_last_name)).requestFocus();
                 return;
             }
-            if (((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).getText().toString().isEmpty()){
+            if (((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).getText().toString().isEmpty()) {
                 Toast.makeText(getActivity(), getString(R.string.enter_email), Toast.LENGTH_LONG).show();
-                ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).requestFocus();
+                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).requestFocus();
                 return;
             }
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).getText().toString()).matches()){
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).getText().toString()).matches()) {
                 Toast.makeText(getActivity(), getString(R.string.enter_valid_email), Toast.LENGTH_LONG).show();
-                ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).requestFocus();
+                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).requestFocus();
                 return;
             }
-            if (((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_phone)).getText().toString().isEmpty()){
+            if (((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_phone)).getText().toString().isEmpty()) {
                 Toast.makeText(getActivity(), getString(R.string.enter_phone), Toast.LENGTH_LONG).show();
-                ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_phone)).requestFocus();
+                ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_phone)).requestFocus();
                 return;
             }
 
-            if (multiPart == null){
-                return;
+            if (multiPart == null) {
+                if (TinyDbManager.getUserInformation().getProfilePic() == null || TinyDbManager.getUserInformation().getProfilePic().isEmpty()) {
+                    Toast.makeText(getActivity(), getString(R.string.select_image), Toast.LENGTH_LONG).show();
+                    return;
+                }
             }
 
-            updateUserData();
+            DialogConfirm dlg = new DialogConfirm(requireActivity(),
+                    R.layout.dlg_confirm_proceed,
+                    R.id.tv_dlg_confirm_proceed_yes,
+                    R.id.tv_dlg_confirm_proceed_no,
+                    R.id.tv_dlg_confirm_proceed_msg,
+                    getString(R.string.confirm_proceed_msg),
+                    new ConfirmDialogInterface() {
+                        @Override
+                        public void onClickedConfirm() {
+                            updateUserData();
+                        }
+
+                        @Override
+                        public void onClickedNo() {
+
+                        }
+                    });
+            dlg.show();
+            Utils.setDialogWidth(dlg, 0.8f, requireActivity());
 
 
         });
@@ -282,77 +303,123 @@ public class FragUpdateProfileMain extends Fragment {
         ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_industry_content)).setAdapter(mAdapterIndustry);
         mAdapterReminder = new SpinnerTextViewAdapter(requireActivity(), mArrReminder);
         ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setAdapter(mAdapterReminder);
+
+        try {
+            if (TinyDbManager.getRemainder() != 0) {
+                int remainder_status = TinyDbManager.getRemainder();
+                if (mArrReminder.size() > remainder_status) {
+                    ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setSelection(remainder_status);
+                }
+            }
+        }catch (NullPointerException | IndexOutOfBoundsException e){
+          e.printStackTrace();
+        }
+        ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                switch (position) {
+                    case 0:
+                        TinyDbManager.saveRemainder(position);
+                        setRemainder(3.6e+6);
+                        break;
+                    case 1:
+                        TinyDbManager.saveRemainder(position);
+                        setRemainder(8.64e+7);
+                        break;
+                    case 2:
+                        TinyDbManager.saveRemainder(position);
+                        setRemainder(6.048e+8);
+                        break;
+                    case 3:
+                        TinyDbManager.saveRemainder(position);
+                        setRemainder(2.628e+9);
+                        break;
+                    case 4:
+                        TinyDbManager.saveRemainder(position);
+                        setRemainder(3.154e+10);
+                        break;
+                    default:
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
+//        String selectedReminder = ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).getSelectedItem().toString();
+
+
+
         initFonts();
     }
 
+    private void setRemainder(double interval_period) {
+        Calendar updateTime = Calendar.getInstance();
+
+        updateTime.set(Calendar.SECOND, 5);
+
+        Intent alarmIntent = new Intent(requireContext(), AlarmReceiver.class);
+        PendingIntent recurringDownload = PendingIntent.getBroadcast(requireContext(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) requireActivity().getSystemService(Context.ALARM_SERVICE);
+        alarms.cancel(recurringDownload);
+        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), (long) interval_period, recurringDownload); //will run it after every 5 seconds.
+
+    }
+
     private void updateUserData() {
-        String first_name = ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_first_name)).getText().toString().trim();
-        String last_name = ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_last_name)).getText().toString().trim();
-        String phone = ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_phone)).getText().toString().trim();
-        String email = ((TextView)mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).getText().toString().trim();
+        String first_name = ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_first_name)).getText().toString().trim();
+        String last_name = ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_last_name)).getText().toString().trim();
+        String phone = ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_phone)).getText().toString().trim();
+        String email = ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).getText().toString().trim();
         String token = repository.getString("token");
-        viewModel.updateUser(token ,first_name,last_name,email,phone,multiPart);
+        viewModel.updateUser(token, first_name, last_name, email, phone, multiPart);
         viewModel._update_user.observe(getViewLifecycleOwner(), response -> {
-            if (response != null){
+            if (response != null) {
                 if (response.isLoading()) {
                     showLoading();
-                } else if (!response.getError().isEmpty()) {
+                } else if (response.getError() != null) {
                     hideLoading();
-                    if (response.getError().isEmpty() || response.getError() == null){
+                    if (response.getError() == null) {
                         showSnackBar("Something went wrong!!");
-                    }else {
-                        showSnackBar(response.getError());
+                    } else {
+                        Constant.getLoginError(CircularApplication.applicationContext, response.getError());
                     }
-                } else if (response.getData().isStatus()) {
+                } else if (response.getData() != null) {
                     hideLoading();
-                    TinyDbManager.saveUserData(response.getData().getData().getUser());
-                    showDialogue(response.getData().getMessage());
+                    if (response.getData().getErrors() == null) {
+                        if (response.getData().getData() != null) {
+                            TinyDbManager.saveUserData(response.getData().getData().getUser());
+                            Intent intent = new Intent(requireContext(), MainActivity.class);
+                            startActivity(intent);
+                            requireActivity().finish();
+                        }
+                    } else {
+                        showSnackBar(response.getData().getErrors());
+                    }
                 }
             }
         });
     }
 
-    private void showDialogue(String message) {
-        DialogConfirm dlg = new DialogConfirm(requireActivity(),
-                R.layout.dlg_confirm_proceed,
-                R.id.tv_dlg_confirm_proceed_yes,
-                R.id.tv_dlg_confirm_proceed_no,
-                R.id.tv_dlg_confirm_proceed_msg,
-                getString(R.string.confirm_proceed_msg),
-                new ConfirmDialogInterface() {
-                    @Override
-                    public void onClickedConfirm() {
-                        Intent intent = new Intent(requireContext(), MainActivity.class);
-                        startActivity(intent);
-                        requireActivity().finish();
-//                        showSnackBar(message);
-                    }
-
-                    @Override
-                    public void onClickedNo() {
-
-                    }
-                });
-        dlg.show();
-        Utils.setDialogWidth(dlg, 0.8f, requireActivity());
-    }
 
     private void showSnackBar(String msg) {
         Snackbar.make(requireView(), msg, Snackbar.LENGTH_SHORT).show();
     }
 
     private void showLoading() {
-        ((ConstraintLayout)mRootView.findViewById(R.id.profile_loading)).setVisibility(View.VISIBLE);
+        ((ConstraintLayout) mRootView.findViewById(R.id.profile_loading)).setVisibility(View.VISIBLE);
     }
 
     private void hideLoading() {
-        ((ConstraintLayout)mRootView.findViewById(R.id.profile_loading)).setVisibility(View.GONE);
+        ((ConstraintLayout) mRootView.findViewById(R.id.profile_loading)).setVisibility(View.GONE);
     }
+
     private void initFonts() {
         ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_title)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
         ((EditText) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_first_name)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
         ((EditText) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_last_name)).setTypeface(CircularApplication.mTfMainBold, Typeface.BOLD);
-        ((EditText) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).setTypeface(CircularApplication.mTfMainRegular);
+        ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_email)).setTypeface(CircularApplication.mTfMainRegular);
         ((EditText) mRootView.findViewById(R.id.tv_frag_update_profile_main_info_phone)).setTypeface(CircularApplication.mTfMainRegular);
         ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_localization_industry)).setTypeface(CircularApplication.mTfMainRegular);
         ((TextView) mRootView.findViewById(R.id.tv_frag_update_profile_main_data_report_preference)).setTypeface(CircularApplication.mTfMainRegular);
@@ -390,7 +457,8 @@ public class FragUpdateProfileMain extends Fragment {
             rlItem.setLayoutParams(lpItem);
             ((TextView) rlItem.findViewById(R.id.tv_report_data_field_item_title)).setText(dataPointsItem.getName());
             ((TextView) rlItem.findViewById(R.id.tv_report_data_field_item_title)).setTypeface(CircularApplication.mTfMainRegular);
-            rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_blue_with_black_corner_normal);            rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.GONE);
+            rlItem.findViewById(R.id.ll_report_data_field_item_content_root).setBackgroundResource(R.drawable.round_rect_blue_with_black_corner_normal);
+            rlItem.findViewById(R.id.iv_report_data_field_item_remove).setVisibility(View.GONE);
             rlItem.findViewById(R.id.tv_report_data_field_item_hint).setVisibility(View.GONE);
             rlItem.measure(0, 0);
             int nItemWidth = rlItem.getMeasuredWidth();
@@ -417,23 +485,23 @@ public class FragUpdateProfileMain extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 try {
 
-                    Uri uri = data.getData();
-                Glide.with(requireContext())
-                        .load(uri)
-                        .placeholder(R.color.white_alpha)
-                        .into((ImageView) mRootView.findViewById(R.id.iv_frag_update_profile_main_info_avatar));
+                    profileUri = data.getData();
+                    Glide.with(requireContext())
+                            .load(profileUri)
+                            .placeholder(R.color.white_alpha)
+                            .into((ImageView) mRootView.findViewById(R.id.iv_frag_update_profile_main_info_avatar));
 
-                File file1 = new File(getRealPathFromURI(uri));
+                    File file1 = new File(getRealPathFromURI(profileUri));
 
-                 multiPart = MultipartBody.Part.createFormData("profile_pic",
-                        file1.getName(),
-                        RequestBody.create(
-                                file1,
-                                MediaType.parse("*/*")
-                        )
-                );
+                    multiPart = MultipartBody.Part.createFormData("profile_pic",
+                            file1.getName(),
+                            RequestBody.create(
+                                    file1,
+                                    MediaType.parse("*/*")
+                            )
+                    );
 
-                }catch (NullPointerException | IllegalStateException e){
+                } catch (NullPointerException | IllegalStateException e) {
                     e.printStackTrace();
                 }
             }
@@ -444,7 +512,7 @@ public class FragUpdateProfileMain extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-       // viewModel..removeObservers(this);
+        // viewModel..removeObservers(this);
         viewModel = null;
     }
 

@@ -34,6 +34,8 @@ import com.circular.circular.view_model.LoginViewModel;
 import com.circular.circular.view_model.RegisterViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
+import okhttp3.ResponseBody;
+
 public class FragSignUp extends Fragment {
     private View mRootView;
     private EditText mEdFirstName;
@@ -155,15 +157,22 @@ public class FragSignUp extends Fragment {
                 if (response != null) {
                     if (response.isLoading()) {
                         showLoading();
-                    } else if (!response.getError().isEmpty()) {
+                    } else if (response.getError() != null) {
                          hideLoading();
-                        if (response.getError().isEmpty() || response.getError() == null){
+                        if (response.getError() == null){
                             showSnackBar("Something went wrong!!");
                         }else {
-                            showSnackBar(response.getError());
+                            Constant.getApiError(CircularApplication.applicationContext,response.getError());
                         }
-                    } else if (response.getData().getData() != null) {
-                        loginUser(email, password,Constant.DEVICE_KEY);
+                    } else if (response.getData() != null) {
+                        hideLoading();
+                        if (response.getData().getErrors() == null) {
+                            if (response.getData().getData() != null) {
+                                loginUser(email, password, Constant.DEVICE_KEY);
+                            }
+                        }else {
+                            showSnackBar(response.getData().getErrors());
+                        }
                     }
                 }
             });
@@ -196,18 +205,27 @@ public class FragSignUp extends Fragment {
             if (response != null) {
                 if (response.isLoading()) {
                     showLoading();
-                } else if (!response.getError().isEmpty()) {
+                } else if (response.getError() != null) {
                     hideLoading();
-                    if (response.getError().isEmpty() || response.getError() == null){
+                    if (response.getError() == null){
                         showSnackBar("Something went wrong!!");
                     }else {
-                        showSnackBar(response.getError());
+                        Constant.getApiError(CircularApplication.applicationContext,response.getError());
                     }
-                } else if (response.getData().getData() != null) {
+                } else if (response.getData() != null) {
+
                     hideLoading();
-                    preferenceRepository.setString("token", "Bearer " + response.getData().getData().getToken());
-                    TinyDbManager.saveUserData(response.getData().getData().getUser());
-                    showDialogue();
+                    if (response.getData().getErrors() == null){
+                        if (response.getData().getData() != null){
+                            hideLoading();
+                            preferenceRepository.setString("token", "Bearer " + response.getData().getData().getToken());
+                            TinyDbManager.saveUserData(response.getData().getData().getUser());
+                            showDialogue();
+                        }
+                    }else {
+                        showSnackBar(response.getData().getErrors());
+                    }
+
                 }
             }
         });

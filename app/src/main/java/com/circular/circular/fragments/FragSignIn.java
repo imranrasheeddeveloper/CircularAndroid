@@ -74,19 +74,30 @@ public class FragSignIn extends Fragment {
                 if (response != null) {
                     if (response.isLoading()) {
                         showLoading();
-                    } else if (!response.getError().isEmpty()) {
+                    } else if (response.getError() != null) {
                         hideLoading();
-                        showSnackBar(response.getError());
-                    } else if (response.getData().getData() != null) {
-                        hideLoading();
-                        if (response.getData().getData().getUser().getIsApiUser() == 1){
-                            TinyDbManager.saveUserType("App User");
+                        if (response.getError() == null){
+                            showSnackBar("Something went wrong!!");
                         }else {
-                            TinyDbManager.saveUserType("Web User");
+                            Constant.getLoginError(CircularApplication.applicationContext,response.getError());
                         }
-                        preferenceRepository.setString("token", "Bearer " + response.getData().getData().getToken());
-                        TinyDbManager.saveUserData(response.getData().getData().getUser());
-                        showDialogue(response.getData().getData().getUser().isIsPasswordChanged(),password);
+                    } else if (response.getData() != null) {
+                        hideLoading();
+                        if (response.getData().getErrors() == null) {
+                            if (response.getData().getData() != null) {
+                                if (response.getData().getData().getUser().getIsApiUser() == 1){
+                                    TinyDbManager.saveUserType("App User");
+                                }else {
+                                    TinyDbManager.saveUserType("Web User");
+                                }
+                                preferenceRepository.setString("token", "Bearer " + response.getData().getData().getToken());
+                                TinyDbManager.saveUserData(response.getData().getData().getUser());
+                                showDialogue(response.getData().getData().getUser().isIsPasswordChanged(),password);
+                            }
+                        }else {
+                            showSnackBar(response.getData().getErrors());
+                        }
+
 
                     }
                 }

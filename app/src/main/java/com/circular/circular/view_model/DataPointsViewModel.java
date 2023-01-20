@@ -30,7 +30,7 @@ public class DataPointsViewModel extends ViewModel {
 
         data_points.setValue(
                 new ResponseWrapper<>(
-                        true, "", null
+                        true, null, null
                 ));
 
         RemoteRepository.getInstance()
@@ -47,15 +47,11 @@ public class DataPointsViewModel extends ViewModel {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody body = ((HttpException) e).response().errorBody();
-                            try {
-                                data_points.setValue(new ResponseWrapper<>(
-                                        false,
-                                        body.string(),
-                                        null
-                                ));
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+                            data_points.setValue(new ResponseWrapper<>(
+                                    false,
+                                    body,
+                                    null
+                            ));
                         }
                     }
 
@@ -63,7 +59,7 @@ public class DataPointsViewModel extends ViewModel {
                     public void onNext(DataPointsModel model) {
                         data_points.setValue(new ResponseWrapper<>(
                                 false,
-                                "",
+                                null,
                                 model
                         ));
                     }
@@ -74,7 +70,7 @@ public class DataPointsViewModel extends ViewModel {
 
         create_pref.setValue(
                 new ResponseWrapper<>(
-                        true, "", null
+                        true, null, null
                 ));
 
         RemoteRepository.getInstance()
@@ -91,15 +87,11 @@ public class DataPointsViewModel extends ViewModel {
                     public void onError(Throwable e) {
                         if (e instanceof HttpException) {
                             ResponseBody body = ((HttpException) e).response().errorBody();
-                            try {
-                                create_pref.setValue(new ResponseWrapper<>(
-                                        false,
-                                        body.string(),
-                                        null
-                                ));
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
+                            create_pref.setValue(new ResponseWrapper<>(
+                                    false,
+                                    body,
+                                    null
+                            ));
                         }
                     }
 
@@ -107,7 +99,7 @@ public class DataPointsViewModel extends ViewModel {
                     public void onNext(CreatePreferencesModel model) {
                         create_pref.setValue(new ResponseWrapper<>(
                                 false,
-                                "",
+                                null,
                                 model
                         ));
                     }

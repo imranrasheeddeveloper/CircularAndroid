@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.circular.circular.CircularApplication;
+import com.circular.circular.Constant;
 import com.circular.circular.MainActivity;
 import com.circular.circular.R;
 import com.circular.circular.adapters.NotificationItemAdapter;
@@ -63,19 +64,25 @@ public class FragNotifications extends Fragment {
             if (response != null) {
                 if (response.isLoading()) {
                     showLoading();
-                } else if (!response.getError().isEmpty()) {
+                } else if (response.getError() != null) {
                     hideLoading();
-                    if (response.getError().isEmpty() || response.getError() == null){
+                    if (response.getError() == null){
                         showSnackBar("Something went wrong!!");
                     }else {
-                        showSnackBar(response.getError());
+                        Constant.getLoginError(CircularApplication.applicationContext,response.getError());
                     }
-                } else if (response.getData().getData() != null) {
+                } else if (response.getData() != null) {
                     hideLoading();
-                    if (response.getData().getData().getNotifications().size() > 0) {
-                        openItemList = new ArrayList<>();
-                        openItemList.addAll(response.getData().getData().getNotifications());
-                        setList(openItemList);
+                    if (response.getData().getErrors() == null) {
+                        if (response.getData().getData() != null) {
+                            if (response.getData().getData().getNotifications().size() > 0) {
+                                openItemList = new ArrayList<>();
+                                openItemList.addAll(response.getData().getData().getNotifications());
+                                setList(openItemList);
+                            }
+                        }
+                    }else {
+                        showSnackBar(response.getData().getErrors());
                     }
                 }
             }
@@ -99,7 +106,7 @@ public class FragNotifications extends Fragment {
                         if (response != null) {
                             if (response.isLoading()) {
                                 // showLoading();
-                            } else if (!response.getError().isEmpty()) {
+                            } else if (response.getError() != null) {
                                 //hideLoading();
                                 //showSnackBar(response.getError());
                             } else if (response.getData().isStatus()) {

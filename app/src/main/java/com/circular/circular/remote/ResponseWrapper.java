@@ -1,12 +1,14 @@
 package com.circular.circular.remote;
 
+import okhttp3.ResponseBody;
+
 public class ResponseWrapper<T> {
 
     private final boolean loading;
-    private final String error;
+    private final ResponseBody error;
     private final T data;
 
-    public ResponseWrapper(boolean loading, String error, T data) {
+    public ResponseWrapper(boolean loading, ResponseBody error, T data) {
         this.loading = loading;
         this.error = error;
         this.data = data;
@@ -16,7 +18,7 @@ public class ResponseWrapper<T> {
         return loading;
     }
 
-    public String getError() {
+    public ResponseBody getError() {
         return error;
     }
 

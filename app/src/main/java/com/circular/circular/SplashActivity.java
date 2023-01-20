@@ -10,11 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.circular.circular.local.PreferenceRepository;
 import com.circular.circular.local.TinyDbManager;
+import com.circular.circular.utils.AlarmReceiver;
 
 public class SplashActivity extends AppCompatActivity {
 
     private static final int SPLASH_TIME = 5000;
     PreferenceRepository repository;
+    private AlarmReceiver mAlarmReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +25,8 @@ public class SplashActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_splash);
         repository = new PreferenceRepository();
+        // Initialize alarm
+        mAlarmReceiver = new AlarmReceiver();
 
         ((TextView)findViewById(R.id.tv_splash_title)).setTypeface(CircularApplication.mTfMainRegular);
         new Handler().postDelayed(new Runnable() {

@@ -92,19 +92,25 @@ public class FragReportDataMain extends Fragment {
             if (response != null){
                 if (response.isLoading()) {
                     showLoading();
-                } else if (!response.getError().isEmpty()) {
+                } else if (response.getError() != null) {
                     hideLoading();
-                    if (response.getError().isEmpty() || response.getError() == null){
+                    if (response.getError() == null){
                         showSnackBar("Something went wrong!!");
                     }else {
-                        showSnackBar(response.getError());
+                        Constant.getLoginError(CircularApplication.applicationContext,response.getError());
                     }
-                } else if (response.getData().getData() != null) {
+                } else if (response.getData() != null) {
                     hideLoading();
 
-                    if (response.getData().getData().getAssignedPreference() != null){
-                        assignedPreferenceItems.addAll(response.getData().getData().getAssignedPreference());
-                        initControls();
+                    if (response.getData().getErrors() == null) {
+                        if (response.getData().getData() != null) {
+                            if (response.getData().getData().getAssignedPreference() != null) {
+                                assignedPreferenceItems.addAll(response.getData().getData().getAssignedPreference());
+                                initControls();
+                            }
+                        }
+                    }else {
+                        showSnackBar(response.getData().getErrors());
                     }
 
                 }
@@ -209,18 +215,24 @@ public class FragReportDataMain extends Fragment {
                                 if (response != null) {
                                     if (response.isLoading()) {
                                         showLoading();
-                                    } else if (!response.getError().isEmpty()) {
+                                    } else if (response.getError() != null) {
                                         hideLoading();
-                                        if (response.getError().isEmpty() || response.getError() == null){
+                                        if (response.getError() == null){
                                             showSnackBar("Something went wrong!!");
                                         }else {
-                                            showSnackBar(response.getError());
+                                            Constant.getLoginError(CircularApplication.applicationContext,response.getError());
                                         }
-                                    } else if (response.getData().isStatus()) {
+                                    } else if (response.getData() != null) {
                                         hideLoading();
-                                        Intent intent = new Intent(requireContext(), MainActivity.class);
-                                        startActivity(intent);
-                                        requireActivity().finish();
+                                        if (response.getData().getErrors() == null) {
+                                            if (response.getData().isStatus()) {
+                                                Intent intent = new Intent(requireContext(), MainActivity.class);
+                                                startActivity(intent);
+                                                requireActivity().finish();
+                                            }
+                                        }else {
+                                            showSnackBar(response.getData().getErrors());
+                                        }
 
                                     }
                                 }

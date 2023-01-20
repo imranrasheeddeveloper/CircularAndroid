@@ -1,8 +1,20 @@
 package com.circular.circular;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import com.circular.circular.model.ErrorBodyModel;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import okhttp3.ResponseBody;
 
 public class Constant {
 //    public static final String BASE_URL = "https://staging.circulartestserver.com.ng/public/api/";
@@ -51,6 +63,62 @@ public class Constant {
             e.printStackTrace();
         }
         return str;
+    }
+
+    public static void getLoginError (Context context, ResponseBody errorBody){
+        String data = null;
+        try {
+            data = errorBody.string();
+            if (data != null && !data.isEmpty()) {
+                JSONObject jObjError = null;
+                try {
+                    jObjError = new JSONObject(data);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Toast.makeText(context, jObjError.getString("errors"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+//        String data = null;
+//        try {
+//            data = errorBody.string();
+//            if (data != null && !data.isEmpty()) {
+//                ErrorBodyModel errorBodyModel;
+//                Gson gson = new Gson();
+//                errorBodyModel = gson.fromJson(data, ErrorBodyModel.class);
+//                Toast.makeText(context, errorBodyModel.getErrors().getEmail().get(0).toString(), Toast.LENGTH_SHORT).show();
+//            }
+//        } catch (IOException e) {
+//            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+//        }
+    }
+
+    public static void getApiError (Context context, ResponseBody errorBody){
+        String data = null;
+        try {
+            data = errorBody.string();
+            if (data != null && !data.isEmpty()) {
+                JSONObject jObjError = null;
+                try {
+                    jObjError = new JSONObject(data);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Toast.makeText(context, jObjError.getString("message"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
 }

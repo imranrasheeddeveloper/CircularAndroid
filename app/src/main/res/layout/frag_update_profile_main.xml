@@ -94,7 +94,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                <EditText
+                <TextView
                     android:id="@+id/tv_frag_update_profile_main_info_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

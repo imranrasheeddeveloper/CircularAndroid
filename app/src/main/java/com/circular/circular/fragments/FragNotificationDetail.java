@@ -76,7 +76,7 @@ public class FragNotificationDetail extends Fragment {
                     if (response != null) {
                         if (response.isLoading()) {
                             // showLoading();
-                        } else if (!response.getError().isEmpty()) {
+                        } else if (response.getError() != null) {
                             //hideLoading();
                             //showSnackBar(response.getError());
                         } else if (response.getData().isStatus()) {

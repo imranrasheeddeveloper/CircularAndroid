@@ -38,7 +38,7 @@ public interface ApiService {
                                      @Field("device_key") String device_key);
 
     @FormUrlEncoded
-    @POST("auth/register")
+    @POST("auth/signup")
     Observable<RegisterModel> registerUser(@Field("name") String firstname,
                                            @Field("last_name") String lastname,
                                            @Field("email") String email,

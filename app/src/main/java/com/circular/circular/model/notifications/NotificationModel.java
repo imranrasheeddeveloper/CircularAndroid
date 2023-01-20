@@ -11,7 +11,7 @@ public class NotificationModel{
 	private String message;
 
 	@SerializedName("errors")
-	private Object errors;
+	private String errors;
 
 	@SerializedName("status")
 	private boolean status;
@@ -24,7 +24,7 @@ public class NotificationModel{
 		return message;
 	}
 
-	public Object getErrors(){
+	public String getErrors(){
 		return errors;
 	}
 

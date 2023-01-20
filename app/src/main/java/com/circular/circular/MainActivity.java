@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -156,6 +157,8 @@ public class MainActivity extends AppCompatActivity
                         new ConfirmDialogInterface() {
                             @Override
                             public void onClickedConfirm() {
+                               repository.setString("token","nil");
+
                                 TinyDbManager.clearUser();
                                 clearSharedPreferances();
                                 Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
@@ -252,20 +255,25 @@ public class MainActivity extends AppCompatActivity
                     if (response != null){
                         if (response.isLoading()) {
                             // showLoading();
-                        } else if (!response.getError().isEmpty()) {
+                        } else if (response.getError() != null) {
                             //hideLoading();
                             //showSnackBar(response.getError());
-                        } else if (response.getData().getData() != null) {
+                        } else if (response.getData() != null) {
                             // hideLoading();
-
-                            if (response.getData().getData().getAssignedPreference() != null){
-                                if (response.getData().getData().getAssignedPreference().size() > 0){
-                                    initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), iNewIndex, m_nMainFooterCurActiveIndex, true);
-                                }else {
-                                    switchClass();
+                            if (response.getData().getErrors() == null) {
+                                if (response.getData().getData() != null) {
+                                    if (response.getData().getData().getAssignedPreference() != null) {
+                                        if (response.getData().getData().getAssignedPreference().size() > 0) {
+                                            initFragmentInMainActivity(R.id.fl_main_container, new FragReportDataMain(), iNewIndex, m_nMainFooterCurActiveIndex, true);
+                                        } else {
+                                            switchClass();
+                                        }
+                                    } else {
+                                        switchClass();
+                                    }
                                 }
                             }else {
-                                switchClass();
+                                Toast.makeText(this, response.getData().getErrors(), Toast.LENGTH_SHORT).show();
                             }
 
                         }
