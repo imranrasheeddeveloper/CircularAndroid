@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ public class FragSignIn extends Fragment {
     private EditText mEdPwd;
     private LoginViewModel viewModel;
     PreferenceRepository preferenceRepository;
+    private ImageView showPass;
 
 
     @SuppressLint("InflateParams")
@@ -52,6 +55,20 @@ public class FragSignIn extends Fragment {
     private void initControls() {
         mEdEmailUserName = mRootView.findViewById(R.id.ed_frag_signin_email_username);
         mEdPwd = mRootView.findViewById(R.id.ed_frag_signin_password);
+        showPass = mRootView.findViewById(R.id.show_signin_password);
+        mEdPwd.setTransformationMethod(new PasswordTransformationMethod());
+
+        showPass.setOnClickListener(v -> {
+            if (showPass.getTag().equals("hide")) {
+                mEdPwd.setTransformationMethod(null);
+                showPass.setImageResource(R.drawable.show_password);
+                showPass.setTag("show");
+            } else {
+                mEdPwd.setTransformationMethod(new PasswordTransformationMethod());
+                showPass.setImageResource(R.drawable.hide_password);
+                showPass.setTag("hide");
+            }
+        });
 
         mRootView.findViewById(R.id.tv_frag_signin_submit).setOnClickListener(view -> {
             if (mEdEmailUserName.getText().toString().isEmpty()) {

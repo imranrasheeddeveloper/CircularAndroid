@@ -264,25 +264,61 @@
                         android:gravity="center_horizontal"
                         android:orientation="vertical">
 
-                        <RelativeLayout
-                            android:id="@+id/rl_main_footer_notification_parent"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <ImageView
-                                android:id="@+id/iv_main_footer_notification_inactive"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/rl_main_footer_notification_parent"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/footer_icon_size_inactive"
-                                android:src="@drawable/footer_notification_normal"
-                                android:visibility="visible" />
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:layout_height="wrap_content">
 
-                            <ImageView
-                                android:id="@+id/iv_main_footer_notification_active"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/footer_icon_size_inactive"
-                                android:src="@drawable/footer_notification_selected"
-                                android:visibility="gone" />
-                        </RelativeLayout>
+
+                                <ImageView
+                                    android:id="@+id/iv_main_footer_notification_inactive"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/footer_icon_size_inactive"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    android:src="@drawable/footer_notification_normal"
+                                    android:visibility="visible" />
+
+                                <ImageView
+                                    android:id="@+id/iv_main_footer_notification_active"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/footer_icon_size_inactive"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    android:src="@drawable/footer_notification_selected"
+                                    android:visibility="gone" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            <TextView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                app:layout_constraintEnd_toEndOf="@id/rl_main_footer_notification_parent"
+                                app:layout_constraintTop_toTopOf="@id/rl_main_footer_notification_parent"
+                                android:layout_marginBottom="20dp"
+                                android:layout_marginEnd="9dp"
+                                android:textSize="11sp"
+                                android:visibility="gone"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:background="@drawable/round_bg"
+                                android:id="@+id/unread_notification"
+                                />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                         <TextView
                             android:id="@+id/tv_main_footer_notification"

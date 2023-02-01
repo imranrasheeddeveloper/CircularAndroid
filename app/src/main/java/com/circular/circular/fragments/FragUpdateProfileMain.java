@@ -262,8 +262,8 @@ public class FragUpdateProfileMain extends Fragment {
 
             if (multiPart == null) {
                 if (TinyDbManager.getUserInformation().getProfilePic() == null || TinyDbManager.getUserInformation().getProfilePic().isEmpty()) {
-                    Toast.makeText(getActivity(), getString(R.string.select_image), Toast.LENGTH_LONG).show();
-                    return;
+//                    Toast.makeText(getActivity(), getString(R.string.select_image), Toast.LENGTH_LONG).show();
+//                    return;
                 }
             }
 
@@ -305,12 +305,12 @@ public class FragUpdateProfileMain extends Fragment {
         ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setAdapter(mAdapterReminder);
 
         try {
-            if (TinyDbManager.getRemainder() != 6) {
-                int remainder_status = TinyDbManager.getRemainder();
-                if (mArrReminder.size() > remainder_status) {
-                    ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setSelection(remainder_status);
+                if (TinyDbManager.getRemainder() != 6) {
+                    int remainder_status = TinyDbManager.getRemainder();
+                    if (mArrReminder.size() > remainder_status) {
+                        ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setSelection(remainder_status);
+                    }
                 }
-            }
         }catch (NullPointerException | IndexOutOfBoundsException e){
           e.printStackTrace();
         }

@@ -34,6 +34,7 @@ import com.circular.circular.local.TinyDbManager;
 import com.circular.circular.model.ReportDataField;
 import com.circular.circular.utils.Utils;
 import com.circular.circular.view_model.DataPointsViewModel;
+import com.circular.circular.view_model.NotificationsViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity
 
     private DataPointsViewModel viewModel;
     PreferenceRepository repository;
+    private int unReadCount = 0;
+    TextView unReadNotification;
 
 
     private int[] m_ArrIvActiveFooterIds = new int[]{
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity
     private int m_nMainFooterCurActiveIndex;
     private View mIvMainShowMenu;
     private View mIvMainBack;
+    private NotificationsViewModel notificationsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +80,13 @@ public class MainActivity extends AppCompatActivity
         m_nMainFooterCurActiveIndex = -1;
         repository = new PreferenceRepository();
         viewModel = new ViewModelProvider(this).get(DataPointsViewModel.class);
+        notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
         setProfileImage();
         initAnimation();
         initControls();
         showOrHideShowMenu(true);
+
     }
 
     private void setProfileImage() {
@@ -114,6 +120,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initControls() {
+        unReadNotification = (TextView) findViewById(R.id.unread_notification);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mIvMainBack = findViewById(R.id.iv_main_back);
         mIvMainShowMenu = findViewById(R.id.iv_main_open_menu);
@@ -128,6 +135,38 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         });
 
+        String token = repository.getString("token");
+        notificationsViewModel.getNotification(token);
+        notificationsViewModel._notification.observe(this, response -> {
+            if (response != null) {
+                if (response.isLoading()) {
+                } else if (response.getError() != null) {
+                    if (response.getError() == null){
+                    }else {
+                        Constant.getLoginError(CircularApplication.applicationContext,response.getError());
+                    }
+                } else if (response.getData() != null) {
+                    if (response.getData().getErrors() == null) {
+                        if (response.getData().getData() != null) {
+                            if (response.getData().getData().getNotifications().size() > 0) {
+                                for (int i = 0; i < response.getData().getData().getNotifications().size(); i++) {
+                                    if (!response.getData().getData().getNotifications().get(i).isIsRead()){
+                                        unReadCount = unReadCount + 1;
+                                    }
+                                }
+                                if (unReadCount > 0){
+                                    unReadNotification.setVisibility(View.VISIBLE);
+                                    unReadNotification.setText(String.valueOf(unReadCount));
+                                }else {
+                                    unReadNotification.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+                    }else {
+                    }
+                }
+            }
+        });
 
         initMainFooter();
         handleFooterMenu(0);
@@ -315,6 +354,7 @@ public class MainActivity extends AppCompatActivity
         } else if (iNewIndex == 3) {
             initFragmentInMainActivity(R.id.fl_main_container, new FragHistory(), iNewIndex, m_nMainFooterCurActiveIndex, true);
         } else if (iNewIndex == 4) {
+            unReadNotification.setVisibility(View.GONE);
             initFragmentInMainActivity(R.id.fl_main_container, new FragNotifications(), iNewIndex, m_nMainFooterCurActiveIndex, true);
         }
         if (m_nMainFooterCurActiveIndex != -1) {

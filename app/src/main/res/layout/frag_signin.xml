@@ -52,6 +52,10 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/tv_frag_signin_title"
                     android:layout_width="wrap_content"
@@ -59,7 +63,11 @@
                     android:text="@string/signin_title"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/fontsize_small"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:gravity="center_horizontal"/>
 
                 <EditText
                     android:id="@+id/ed_frag_signin_email_username"
@@ -72,6 +80,9 @@
                     android:inputType="textEmailAddress"
                     android:padding="5dp"
                     android:singleLine="true"
+                    app:layout_constraintTop_toBottomOf="@id/tv_frag_signin_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:textSize="@dimen/fontsize_tiny" />
 
                 <EditText
@@ -82,10 +93,24 @@
                     android:background="@drawable/round_rect_dark_white_normal"
                     android:gravity="center_horizontal"
                     android:hint="@string/signin_pwd"
+                    app:layout_constraintTop_toBottomOf="@id/ed_frag_signin_email_username"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:inputType="textPassword"
                     android:padding="5dp"
                     android:singleLine="true"
                     android:textSize="@dimen/fontsize_tiny" />
+
+                <ImageView
+                    android:id="@+id/show_signin_password"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:tag="hide"
+                    app:layout_constraintEnd_toEndOf="@id/ed_frag_signin_password"
+                    app:layout_constraintTop_toTopOf="@id/ed_frag_signin_password"
+                    app:layout_constraintBottom_toBottomOf="@id/ed_frag_signin_password"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/hide_password" />
 
 
                 <TextView
@@ -96,9 +121,15 @@
                     android:background="@drawable/round_rect_red_selector"
                     android:gravity="center_horizontal"
                     android:padding="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ed_frag_signin_password"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:text="@string/submit"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/fontsize_big" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </LinearLayout>
         </ScrollView>
 
