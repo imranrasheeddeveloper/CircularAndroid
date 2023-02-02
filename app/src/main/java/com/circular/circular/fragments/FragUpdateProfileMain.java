@@ -293,8 +293,8 @@ public class FragUpdateProfileMain extends Fragment {
         mRootView.findViewById(R.id.iv_frag_update_profile_main_info_avatar).setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+          //  intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            startActivityForResult(intent, 1);
         });
 
         mAdapterLocalization = new SpinnerTextViewAdapter(requireActivity(), mArrLocalization);

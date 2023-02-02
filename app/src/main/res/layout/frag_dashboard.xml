@@ -292,6 +292,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/reported_data_indicator_title"
+                                android:textColor="@color/txtclr_darker_gray"
                                 android:textSize="@dimen/fontsize_extra_tiny" />
 
                             <TextView
