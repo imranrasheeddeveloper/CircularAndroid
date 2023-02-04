@@ -360,7 +360,8 @@ public class FragUpdateProfileMain extends Fragment {
         updateTime.set(Calendar.SECOND, 5);
 
         Intent alarmIntent = new Intent(requireContext(), AlarmReceiver.class);
-        PendingIntent recurringDownload = PendingIntent.getBroadcast(requireContext(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent recurringDownload = PendingIntent.getActivity(requireContext(), 1, alarmIntent
+                , PendingIntent.FLAG_IMMUTABLE);
         AlarmManager alarms = (AlarmManager) requireActivity().getSystemService(Context.ALARM_SERVICE);
         alarms.cancel(recurringDownload);
         alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), (long) interval_period, recurringDownload); //will run it after every 5 seconds.
