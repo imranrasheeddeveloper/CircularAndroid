@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -179,7 +180,10 @@ public class FragReportDataMain extends Fragment {
                 if (isStringContainsSpecialCharacter){
                     showSnackBar(assignedPreferenceItems.get(0).getDataPoints().get(i).getName() + " is Invalid");
                     return;
-                }else if (Integer.valueOf(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription()) == 0) {
+                }else if (!TextUtils.isDigitsOnly(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription())){
+                    showSnackBar(assignedPreferenceItems.get(0).getDataPoints().get(i).getName() + " is Invalid, Use Numbers.");
+                    return;
+                }else if (Integer.parseInt(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription()) == 0) {
                     showSnackBar(assignedPreferenceItems.get(0).getDataPoints().get(i).getName() + " is Required.");
                     return;
                 }
@@ -190,11 +194,19 @@ public class FragReportDataMain extends Fragment {
             }
 
 
+
+            try {
+
+
             for (int i = 0; i < assignedPreferenceItems.get(0).getDataPoints().size(); i++) {
                 data_ids.add(assignedPreferenceItems.get(0).getDataPoints().get(i).getId());
                 data_values.add(Integer.valueOf(assignedPreferenceItems.get(0).getDataPoints().get(i).getDescription()));
             }
 
+            }catch (NumberFormatException e){
+                e.printStackTrace();
+                return;
+            }
             JsonObject object = new JsonObject();
             Gson gson = new Gson();
             object.add("data_point_id",gson.toJsonTree(data_ids));

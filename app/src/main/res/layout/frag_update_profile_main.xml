@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@android:color/transparent"
-                    android:inputType="textPhonetic"
+                    android:inputType="phone"
                     android:text="08039283492"
                     android:textColor="@color/txtclr_dark_gray"
                     android:textSize="@dimen/fontsize_tiny1" />

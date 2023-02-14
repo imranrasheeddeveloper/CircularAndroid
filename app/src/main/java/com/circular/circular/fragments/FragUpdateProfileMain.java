@@ -71,6 +71,7 @@ public class FragUpdateProfileMain extends Fragment {
     Uri profileUri;
 
     PreferenceRepository repository;
+    int selectedLocalizationContentPosition = 10, selectedIndustryContentPosition = 10;
     private final String[] arrLocalization = new String[]{
             "Alimosho Local Government",
             "Lagos State Government"
@@ -293,7 +294,7 @@ public class FragUpdateProfileMain extends Fragment {
         mRootView.findViewById(R.id.iv_frag_update_profile_main_info_avatar).setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
-          //  intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            //  intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             startActivityForResult(intent, 1);
         });
 
@@ -304,15 +305,56 @@ public class FragUpdateProfileMain extends Fragment {
         mAdapterReminder = new SpinnerTextViewAdapter(requireActivity(), mArrReminder);
         ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setAdapter(mAdapterReminder);
 
+        ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_localization_content)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                selectedLocalizationContentPosition = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
+        ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_industry_content)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                selectedIndustryContentPosition = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+        });
         try {
-                if (TinyDbManager.getRemainder() != 6) {
-                    int remainder_status = TinyDbManager.getRemainder();
-                    if (mArrReminder.size() > remainder_status) {
-                        ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setSelection(remainder_status);
-                    }
+            int locPos = repository.getInt("selected_localization_content");
+            if (locPos != -1) {
+                ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_localization_content)).setSelection(locPos);
+            }
+        } catch (NullPointerException | IllegalStateException | IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            int indPos = repository.getInt("selected_industry_content");
+            if (indPos != -1) {
+                ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_industry_content)).setSelection(indPos);
+            }
+        } catch (NullPointerException | IllegalStateException | IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (TinyDbManager.getRemainder() != 6) {
+                int remainder_status = TinyDbManager.getRemainder();
+                if (mArrReminder.size() > remainder_status) {
+                    ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setSelection(remainder_status);
                 }
-        }catch (NullPointerException | IndexOutOfBoundsException e){
-          e.printStackTrace();
+            }
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            e.printStackTrace();
         }
         ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -341,6 +383,7 @@ public class FragUpdateProfileMain extends Fragment {
                     default:
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
 
@@ -348,7 +391,6 @@ public class FragUpdateProfileMain extends Fragment {
 
         });
 //        String selectedReminder = ((Spinner) mRootView.findViewById(R.id.sp_frag_update_profile_main_report_frequency_reminder_content)).getSelectedItem().toString();
-
 
 
         initFonts();
@@ -391,6 +433,12 @@ public class FragUpdateProfileMain extends Fragment {
                     if (response.getData().getErrors() == null) {
                         if (response.getData().getData() != null) {
                             TinyDbManager.saveUserData(response.getData().getData().getUser());
+                            if (selectedLocalizationContentPosition != 10) {
+                                repository.setInt("selected_localization_content", selectedLocalizationContentPosition);
+                            }
+                            if (selectedIndustryContentPosition != 10) {
+                                repository.setInt("selected_industry_content", selectedIndustryContentPosition);
+                            }
                             Intent intent = new Intent(requireContext(), MainActivity.class);
                             startActivity(intent);
                             requireActivity().finish();
