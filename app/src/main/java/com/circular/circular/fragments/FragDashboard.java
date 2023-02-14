@@ -222,11 +222,13 @@ public class FragDashboard extends Fragment {
                     getString(R.string.dummy_featured_project_content)));
         }
         mSliderAdapter.renewItems(projects);
+        sliderView.setCurrentPageListener(position -> ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_featured_projects_title)).setText(projects.get(position).getTitle()));
+        ((TextView) mRootView.findViewById(R.id.tv_frag_dashboard_featured_projects_title)).setText(projects.get(sliderView.getCurrentPagePosition()).getTitle());
     }
 
 //    private void initChart(){
 //        mCtReportedData = (BarChart)mRootView.findViewById(R.id.ct_frag_dashboard_reported_data_indicator);
-////        mCtReportedData.setOnChartValueSelectedListener(this);
+//        mCtReportedData.setOnChartValueSelectedListener(this);
 //
 //        mCtReportedData.setDrawBarShadow(false);
 //        mCtReportedData.setDrawValueAboveBar(true);
