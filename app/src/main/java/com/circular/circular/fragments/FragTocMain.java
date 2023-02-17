@@ -37,8 +37,8 @@ public class FragTocMain extends Fragment {
     }
 
     private void getTermsContent() {
-        viewModel.about();
-        viewModel._about_content.observe(getViewLifecycleOwner(), response -> {
+        viewModel.terms();
+        viewModel._terms_content.observe(getViewLifecycleOwner(), response -> {
             if (response != null){
                 if (response.isLoading()) {
                     showLoading();
