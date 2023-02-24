@@ -79,6 +79,9 @@
                         android:minWidth="50dp"
                         android:minHeight="55dp"
                         android:text=""
+                        android:textColorHint="@color/hint"
+                        android:singleLine="true"
+                        android:textColor="@color/txtclr_darker_gray"
                         android:textSize="@dimen/fontsize_xx_large" />
 
                     <RelativeLayout
@@ -94,6 +97,9 @@
                         android:inputType="number"
                         android:maxLength="1"
                         android:minWidth="50dp"
+                        android:textColorHint="@color/hint"
+                        android:singleLine="true"
+                        android:textColor="@color/txtclr_darker_gray"
                         android:minHeight="55dp"
                         android:text=""
                         android:textSize="@dimen/fontsize_xx_large" />
@@ -113,6 +119,9 @@
                         android:minWidth="50dp"
                         android:minHeight="55dp"
                         android:text=""
+                        android:textColorHint="@color/hint"
+                        android:singleLine="true"
+                        android:textColor="@color/txtclr_darker_gray"
                         android:textSize="@dimen/fontsize_xx_large" />
 
                     <RelativeLayout
@@ -130,6 +139,9 @@
                         android:minWidth="50dp"
                         android:minHeight="55dp"
                         android:text=""
+                        android:textColorHint="@color/hint"
+                        android:singleLine="true"
+                        android:textColor="@color/txtclr_darker_gray"
                         android:textSize="@dimen/fontsize_xx_large" />
 
                 </LinearLayout>

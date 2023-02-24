@@ -77,7 +77,9 @@
                     android:hint="@string/enter_new_pwd"
                     android:inputType="textPassword"
                     android:padding="5dp"
+                    android:textColorHint="@color/hint"
                     android:singleLine="true"
+                    android:textColor="@color/txtclr_darker_gray"
                     android:textSize="@dimen/fontsize_tiny" />
 
                 <EditText
@@ -90,7 +92,9 @@
                     android:hint="@string/confirm_pwd_hint"
                     android:inputType="textPassword"
                     android:padding="5dp"
+                    android:textColorHint="@color/hint"
                     android:singleLine="true"
+                    android:textColor="@color/txtclr_darker_gray"
                     android:textSize="@dimen/fontsize_tiny" />
 
                 <TextView

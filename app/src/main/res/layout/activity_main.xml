@@ -149,6 +149,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/dashboard"
+                            android:textColor="@color/txtclr_dark_gray"
                             android:textSize="@dimen/fontsize_super_tiny" />
                     </LinearLayout>
 
@@ -184,6 +185,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/about"
+                            android:textColor="@color/txtclr_dark_gray"
                             android:textSize="@dimen/fontsize_super_tiny" />
                     </LinearLayout>
 
@@ -219,6 +221,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/report_data"
+                            android:textColor="@color/txtclr_dark_gray"
                             android:textSize="@dimen/fontsize_super_tiny" />
                     </LinearLayout>
 
@@ -254,6 +257,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/history"
+                            android:textColor="@color/txtclr_dark_gray"
                             android:textSize="@dimen/fontsize_super_tiny" />
                     </LinearLayout>
 
@@ -325,6 +329,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/notification"
+                            android:textColor="@color/txtclr_dark_gray"
                             android:textSize="@dimen/fontsize_super_tiny" />
                     </LinearLayout>
                 </LinearLayout>

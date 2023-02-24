@@ -301,6 +301,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:text="@string/reported_data_show_details_title"
+                                android:textColor="@color/txtclr_dark_gray"
                                 android:textSize="@dimen/fontsize_extra_tiny" />
                         </RelativeLayout>
 

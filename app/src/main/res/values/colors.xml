@@ -19,4 +19,5 @@
     <color name="purple">#FF65025f</color>
     <color name="txtclr_darker_gray">#FF3a3a3a</color>
     <color name="txtclr_dark_gray">#FF6e6e6e</color>
+    <color name="hint">#828282</color>
 </resources>
