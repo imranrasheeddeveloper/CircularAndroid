@@ -33,6 +33,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006515455817:android:6f45f1e3ee76451805bc98",
+        "android_client_info": {
+          "package_name": "com.lasgcircular.softcitygroup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006515455817-147msbbfiosuhbk2hhjen8e1nj8ovjr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATtlYsyIH9XJKxyvyrTotKNLLeggcXAF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006515455817-147msbbfiosuhbk2hhjen8e1nj8ovjr8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

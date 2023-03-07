@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".CircularApplication"
+        android:name="com.lasgcircular.softcitygroup.CircularApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,12 +15,12 @@
         android:largeHeap="true"
         >
         <activity
-            android:name=".MainActivity"
+            android:name="com.lasgcircular.softcitygroup.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Circular.NoActionBar" />
         <activity
-            android:name=".SplashActivity"
+            android:name="com.lasgcircular.softcitygroup.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Circular.NoActionBar">
@@ -31,25 +31,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name="com.lasgcircular.softcitygroup.SignUpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Circular.NoActionBar" />
-        <activity android:name=".TocActivity"
+        <activity android:name="com.lasgcircular.softcitygroup.TocActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Circular.NoActionBar" />
-        <activity android:name=".ProfileActivity"
+        <activity android:name="com.lasgcircular.softcitygroup.ProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Circular.NoActionBar"/>
 
         <service
-            android:name=".FirebaseCloudMessagingService"
+            android:name="com.lasgcircular.softcitygroup.FirebaseCloudMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <receiver android:name=".utils.AlarmReceiver"/>
+        <receiver android:name="com.lasgcircular.softcitygroup.utils.AlarmReceiver"/>
 
 
     </application>

@@ -305,7 +305,7 @@
                                 android:textSize="@dimen/fontsize_extra_tiny" />
                         </RelativeLayout>
 
-                        <com.circular.circular.ui.ChartRoot
+                        <com.lasgcircular.softcitygroup.ui.ChartRoot
                             android:id="@+id/ct_frag_dashboard_reported_data_root"
                             android:layout_width="match_parent"
                             android:layout_height="220dp"
