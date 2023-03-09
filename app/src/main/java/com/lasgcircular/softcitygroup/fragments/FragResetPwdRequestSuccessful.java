@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.lasgcircular.softcitygroup.CircularApplication;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.SignUpActivity;
 
 public class FragResetPwdRequestSuccessful extends Fragment {

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lasgcircular.softcitygroup.CircularApplication;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.model.RecordsItem;
 import com.lasgcircular.softcitygroup.utils.Utils;
 

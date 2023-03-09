@@ -19,7 +19,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.lasgcircular.softcitygroup.CircularApplication;
 import com.lasgcircular.softcitygroup.Constant;
 import com.lasgcircular.softcitygroup.MainActivity;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.adapters.NotificationItemAdapter;
 import com.lasgcircular.softcitygroup.local.PreferenceRepository;
 import com.lasgcircular.softcitygroup.model.NotificationItem;

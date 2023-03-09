@@ -36,7 +36,7 @@ import com.lasgcircular.softcitygroup.CircularApplication;
 import com.lasgcircular.softcitygroup.Constant;
 import com.lasgcircular.softcitygroup.MainActivity;
 import com.lasgcircular.softcitygroup.ProfileActivity;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.adapters.SpinnerTextViewAdapter;
 import com.lasgcircular.softcitygroup.dialog.ConfirmDialogInterface;
 import com.lasgcircular.softcitygroup.dialog.DialogConfirm;

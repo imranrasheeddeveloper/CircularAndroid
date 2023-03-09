@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.lasgcircular.softcitygroup.CircularApplication;
 import com.lasgcircular.softcitygroup.Constant;
 import com.lasgcircular.softcitygroup.MainActivity;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.local.PreferenceRepository;
 import com.lasgcircular.softcitygroup.model.notifications.NotificationsItem;
 import com.lasgcircular.softcitygroup.view_model.NotificationsViewModel;

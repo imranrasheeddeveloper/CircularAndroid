@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.airbnb.lottie.LottieAnimationView;
 import com.lasgcircular.softcitygroup.CircularApplication;
 import com.lasgcircular.softcitygroup.Constant;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.TocActivity;
 import com.lasgcircular.softcitygroup.model.ContentData;
 import com.lasgcircular.softcitygroup.view_model.AppInformationViewModel;

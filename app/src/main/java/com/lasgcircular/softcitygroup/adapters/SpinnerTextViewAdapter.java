@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.lasgcircular.softcitygroup.CircularApplication;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 
 import java.util.ArrayList;
 

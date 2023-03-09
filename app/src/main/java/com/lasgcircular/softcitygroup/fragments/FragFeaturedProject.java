@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.lasgcircular.softcitygroup.CircularApplication;
 import com.lasgcircular.softcitygroup.Constant;
 import com.lasgcircular.softcitygroup.MainActivity;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.model.ProjectsItem;
 
 public class FragFeaturedProject extends Fragment {

@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.lasgcircular.softcitygroup.CircularApplication;
 import com.lasgcircular.softcitygroup.Constant;
 import com.lasgcircular.softcitygroup.MainActivity;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.fragments.FragFeaturedProject;
 import com.lasgcircular.softcitygroup.model.ProjectsItem;
 import com.smarteist.autoimageslider.SliderViewAdapter;

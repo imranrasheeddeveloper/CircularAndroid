@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.fragments.FragUpdateProfileMain;
 import com.lasgcircular.softcitygroup.fragments.FragUpdateProfilePreferences;
 import com.lasgcircular.softcitygroup.local.TinyDbManager;

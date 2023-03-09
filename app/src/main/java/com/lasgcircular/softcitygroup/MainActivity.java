@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.dialog.ConfirmDialogInterface;
 import com.lasgcircular.softcitygroup.dialog.DialogConfirm;
 import com.lasgcircular.softcitygroup.fragments.FragAbout;

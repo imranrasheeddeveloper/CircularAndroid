@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.airbnb.lottie.LottieAnimationView;
 import com.lasgcircular.softcitygroup.CircularApplication;
 import com.lasgcircular.softcitygroup.Constant;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.SignUpActivity;
 import com.lasgcircular.softcitygroup.dialog.ConfirmDialogInterface;
 import com.lasgcircular.softcitygroup.dialog.DialogConfirm;

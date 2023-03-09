@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.MutableLiveData;
 
 
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

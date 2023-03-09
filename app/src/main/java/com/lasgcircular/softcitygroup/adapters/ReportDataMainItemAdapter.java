@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 
 import com.lasgcircular.softcitygroup.CircularApplication;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 import com.lasgcircular.softcitygroup.model.data_points.DataPointsItem;
 
 import java.util.ArrayList;

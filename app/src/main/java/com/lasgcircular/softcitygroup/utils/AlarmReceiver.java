@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import com.lasgcircular.softcitygroup.MainActivity;
-import com.circular.circular.R;
+import com.lasgcircular.softcitygroup.R;
 
 public class AlarmReceiver extends WakefulBroadcastReceiver {
     AlarmManager mAlarmManager;
